@@ -3,6 +3,7 @@
 **CID**: 02631134
 
 This is the submission template for your Computing 2 Applications coursework submission.
+coolbeans
 
 ## Checklist
 ### Install dependencies locally
