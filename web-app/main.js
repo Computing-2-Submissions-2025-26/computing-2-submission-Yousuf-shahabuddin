@@ -37,5 +37,35 @@ const updateUI = function () {
         player1Board.classList.remove("active-board");
     }
 
-    // Later, we will add code here to draw the SVG tiles based on gameState.factories
+    // --- NEW: Draw the Factories ---
+    const factoriesContainer = document.getElementById("factories-container");
+    factoriesContainer.innerHTML = '<h3>Factories</h3>'; // Clear old ones
+
+    gameState.factories.forEach((factory, index) => {
+        const factoryDiv = document.createElement("div");
+        factoryDiv.className = "factory";
+        factoryDiv.style.border = "2px solid #ccc";
+        factoryDiv.style.borderRadius = "50%";
+        factoryDiv.style.padding = "20px";
+        factoryDiv.style.margin = "10px";
+        factoryDiv.style.display = "inline-block";
+
+        // Add the colored tiles as little squares
+        factory.forEach(tileColor => {
+            const tileSpan = document.createElement("span");
+            tileSpan.style.display = "inline-block";
+            tileSpan.style.width = "30px";
+            tileSpan.style.height = "30px";
+            tileSpan.style.margin = "5px";
+            tileSpan.style.backgroundColor = tileColor; 
+            if (tileColor === 'white') tileSpan.style.border = "1px solid black";
+            
+            // We will add click events to these later!
+            factoryDiv.appendChild(tileSpan);
+        });
+
+        factoriesContainer.appendChild(factoryDiv);
+    });
 };
+
+    // Later, we will add code here to draw the SVG tiles based on gameState.factories
