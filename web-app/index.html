@@ -13,7 +13,6 @@
             <h2>Welcome to Azul</h2>
             <p><strong>Goal:</strong> Score the most points by tiling the walls of the Royal Palace.</p>
             <p><strong>Turn:</strong> Pick tiles of one color from a Factory or the Center, and place them in your Pattern Lines.</p>
-            <p><strong>Rules:</strong> You cannot place a color in a row if it already contains a different color, or if your wall already has that color in that row!</p>
             <button id="start-game-btn">Play Game</button>
         </div>
     </div>
@@ -24,21 +23,25 @@
     </header>
 
     <main id="game-board">
-        <section id="factories-container">
-            </section>
-
-        <section id="center-container">
-            </section>
+        <section id="factories-container"></section>
+        <section id="center-container"></section>
 
         <section id="player-boards-container">
             <div id="player-1-board" class="player-board active-board">
-                <h3>Player 1 Board</h3>
-                <div id="p1-pattern-lines" class="pattern-lines"></div>
+                <h3>Player 1 <span id="p1-score" class="score-display">Score: 0</span></h3>
+                <div class="board-layout">
+                    <div id="p1-pattern-lines" class="pattern-lines"></div>
+                    <div id="p1-wall" class="wall-grid"></div>
+                </div>
                 <div id="p1-floor-line" class="floor-line">Floor Line: </div>
             </div>
+
             <div id="player-2-board" class="player-board">
-                <h3>Player 2 Board</h3>
-                <div id="p2-pattern-lines" class="pattern-lines"></div>
+                <h3>Player 2 <span id="p2-score" class="score-display">Score: 0</span></h3>
+                <div class="board-layout">
+                    <div id="p2-pattern-lines" class="pattern-lines"></div>
+                    <div id="p2-wall" class="wall-grid"></div>
+                </div>
                 <div id="p2-floor-line" class="floor-line">Floor Line: </div>
             </div>
         </section>
