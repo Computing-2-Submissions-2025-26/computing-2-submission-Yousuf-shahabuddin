@@ -5,6 +5,11 @@
 This is the submission template for your Computing 2 Applications coursework submission.
 coolbeans
 
+THINGS TO DO:
+-make custom svg for each tile + 1st player tile
+-factory tile base
+
+
 ## Checklist
 ### Install dependencies locally
 This template relies on a a few packages from the Node Package Manager, npm.
