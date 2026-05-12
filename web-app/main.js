@@ -39,7 +39,7 @@ const updateUI = function () {
 
     // --- NEW: Draw the Factories ---
     const factoriesContainer = document.getElementById("factories-container");
-    factoriesContainer.innerHTML = '<h3>Factories</h3>'; // Clear old ones
+    factoriesContainer.innerHTML = "<h3>Factories</h3>"; // Clear old ones
 
     gameState.factories.forEach((factory, index) => {
         const factoryDiv = document.createElement("div");
@@ -58,7 +58,7 @@ const updateUI = function () {
             tileSpan.style.height = "30px";
             tileSpan.style.margin = "5px";
             tileSpan.style.backgroundColor = tileColor; 
-            if (tileColor === 'white') tileSpan.style.border = "1px solid black";
+            if (tileColor === "white") tileSpan.style.border = "1px solid black";
             
             // We will add click events to these later!
             factoryDiv.appendChild(tileSpan);
@@ -68,4 +68,4 @@ const updateUI = function () {
     });
 };
 
-    // Later, we will add code here to draw the SVG tiles based on gameState.factories
+    // Later, we will add code here to draw the SVG tiles

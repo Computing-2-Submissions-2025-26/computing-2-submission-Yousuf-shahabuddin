@@ -1,6 +1,6 @@
 import R from "./ramda.js";
 
-const TILE_COLORS = ['blue', 'yellow', 'red', 'black', 'white'];
+const TILE_COLORS = ["blue", "yellow", "red", "black", "white"];
 
 /**
  * Shuffles an array randomly.
@@ -55,6 +55,6 @@ export const createGame = function (numPlayers) {
         center: ['first-player-token'],
         bag: currentBag, // The remaining tiles
         box: [], // Empty discard lid
-        phase: 'FACTORY_OFFER'
+        phase: "FACTORY_OFFER"
     };
 };
