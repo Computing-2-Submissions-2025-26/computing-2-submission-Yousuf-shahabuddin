@@ -37,7 +37,7 @@ const handlePatternLineClick = function (patternLineIndex) {
     if (!selectedPick) {
         return;
     }
-    
+
     try {
         if (selectedPick.source === "factory") {
             gameState = Azul.pickFromFactory(
@@ -64,22 +64,22 @@ const handlePatternLineClick = function (patternLineIndex) {
 
 const createTileElement = function (color, isFaded = false) {
     const img = document.createElement("img");
-    
+
     if (color === "first-player-token") {
-        img.src = "assets/first-player-token.svg"; 
+        img.src = "assets/first-player-token.svg";
         img.alt = "Token";
-        img.style.backgroundColor = "purple"; 
+        img.style.backgroundColor = "purple";
     } else {
-        img.src = "assets/tile-" + color + ".svg"; 
+        img.src = "assets/tile-" + color + ".svg";
         img.alt = color + " tile";
-        img.style.backgroundColor = color; 
+        img.style.backgroundColor = color;
     }
-    
+
     img.style.width = "30px";
     img.style.height = "30px";
     img.style.margin = "2px";
     img.style.display = "inline-block";
-    
+
     if (color === "white") {
         img.style.border = "1px solid black";
     }
@@ -101,28 +101,29 @@ const createEmptySlot = function () {
 
 const drawPlayerBoard = function (playerIndex, playerState) {
     const scoreId = "p" + (playerIndex + 1) + "-score";
-    document.getElementById(scoreId).textContent = "Score: " + playerState.score;
+    const scoreElement = document.getElementById(scoreId);
+    scoreElement.textContent = "Score: " + playerState.score;
 
     const linesId = "p" + (playerIndex + 1) + "-pattern-lines";
     const linesContainer = document.getElementById(linesId);
     linesContainer.innerHTML = "";
-    
+
     playerState.patternLines.forEach(function (line, rowIndex) {
         const rowDiv = document.createElement("div");
         rowDiv.className = "pattern-line-row";
-        
+
         const emptyCount = (rowIndex + 1) - line.length;
         let i = 0;
-        
+
         while (i < emptyCount) {
             rowDiv.appendChild(createEmptySlot());
             i += 1;
         }
-        
+
         line.forEach(function (color) {
             rowDiv.appendChild(createTileElement(color));
         });
-        
+
         if (gameState.activePlayerIndex === playerIndex) {
             rowDiv.onclick = function () {
                 handlePatternLineClick(rowIndex);
@@ -134,11 +135,11 @@ const drawPlayerBoard = function (playerIndex, playerState) {
     const wallId = "p" + (playerIndex + 1) + "-wall";
     const wallContainer = document.getElementById(wallId);
     wallContainer.innerHTML = "";
-    
+
     [0, 1, 2, 3, 4].forEach(function (r) {
         const wallRowDiv = document.createElement("div");
         wallRowDiv.className = "wall-row";
-        
+
         [0, 1, 2, 3, 4].forEach(function (c) {
             const placedColor = playerState.wall[r][c];
             if (placedColor) {
@@ -154,11 +155,11 @@ const drawPlayerBoard = function (playerIndex, playerState) {
     const floorId = "p" + (playerIndex + 1) + "-floor-line";
     const floorDiv = document.getElementById(floorId);
     floorDiv.innerHTML = "<span>Floor Line: </span>";
-    
+
     playerState.floorLine.forEach(function (color) {
         floorDiv.appendChild(createTileElement(color));
     });
-    
+
     if (gameState.activePlayerIndex === playerIndex) {
         floorDiv.onclick = function () {
             handlePatternLineClick(5);
@@ -185,30 +186,34 @@ const updateUI = function () {
 
     const factoriesContainer = document.getElementById("factories-container");
     factoriesContainer.innerHTML = "<h3>Factories</h3>";
-    
+
     gameState.factories.forEach(function (factory, index) {
         if (factory.length === 0) {
             return;
         }
-        
+
         const factoryDiv = document.createElement("div");
         factoryDiv.className = "factory";
-        
+
         factory.forEach(function (tileColor) {
             const tileImg = createTileElement(tileColor);
             tileImg.style.cursor = "pointer";
-            
-            const isSelectedFactory = selectedPick 
-                && selectedPick.source === "factory" 
-                && selectedPick.index === index 
-                && selectedPick.color === tileColor;
-                
+
+            let isSelectedFactory = false;
+            if (selectedPick !== null) {
+                if (selectedPick.source === "factory" &&
+                    selectedPick.index === index &&
+                    selectedPick.color === tileColor) {
+                    isSelectedFactory = true;
+                }
+            }
+
             if (isSelectedFactory) {
                 tileImg.style.border = "3px solid #00ff00";
             }
-            
+
             tileImg.onclick = function () {
-                const isActive = gameState.activePlayerIndex === 0 
+                const isActive = gameState.activePlayerIndex === 0
                               || gameState.activePlayerIndex === 1;
                 if (isActive) {
                     handleFactoryClick(index, tileColor);
@@ -221,28 +226,32 @@ const updateUI = function () {
 
     const centerContainer = document.getElementById("center-container");
     centerContainer.innerHTML = "<h3>Center</h3>";
-    
+
     const centerDiv = document.createElement("div");
     centerDiv.style.border = "2px dashed #999";
     centerDiv.style.padding = "20px";
     centerDiv.style.minHeight = "40px";
-    
+
     gameState.center.forEach(function (tileColor) {
         const tileImg = createTileElement(tileColor);
-        
+
         if (tileColor !== "first-player-token") {
             tileImg.style.cursor = "pointer";
-            
-            const isSelectedCenter = selectedPick 
-                && selectedPick.source === "center" 
-                && selectedPick.color === tileColor;
-                
+
+            let isSelectedCenter = false;
+            if (selectedPick !== null) {
+                if (selectedPick.source === "center" &&
+                    selectedPick.color === tileColor) {
+                    isSelectedCenter = true;
+                }
+            }
+
             if (isSelectedCenter) {
                 tileImg.style.border = "3px solid #00ff00";
             }
-            
+
             tileImg.onclick = function () {
-                const isActive = gameState.activePlayerIndex === 0 
+                const isActive = gameState.activePlayerIndex === 0
                               || gameState.activePlayerIndex === 1;
                 if (isActive) {
                     handleCenterClick(tileColor);
@@ -251,7 +260,7 @@ const updateUI = function () {
         }
         centerDiv.appendChild(tileImg);
     });
-    
+
     centerContainer.appendChild(centerDiv);
     drawPlayerBoard(0, gameState.players[0]);
     drawPlayerBoard(1, gameState.players[1]);
