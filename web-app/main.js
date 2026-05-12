@@ -24,55 +24,72 @@ const handleFactoryClick = function (factoryIndex, color) {
 const handlePatternLineClick = function (patternLineIndex) {
     if (!selectedPick) { return; }
     
-    if (selectedPick.source === "factory") {
-        gameState = Azul.pickFromFactory(
-            gameState, 
-            selectedPick.index, 
-            selectedPick.color, 
-            patternLineIndex
-        );
+    try {
+        if (selectedPick.source === "factory") {
+            gameState = Azul.pickFromFactory(
+                gameState, 
+                selectedPick.index, 
+                selectedPick.color, 
+                patternLineIndex
+            );
+        }
+        
+        selectedPick = null;
+        updateUI();
+    } catch (error) {
+        alert(error.message); // Warns user if move is illegal
+        selectedPick = null;
+        updateUI();
     }
-    
-    selectedPick = null;
-    updateUI();
 };
 
+// --- NEW: Renders an <img> tag pointing to your SVGs ---
 const createTileElement = function (color) {
-    const tileSpan = document.createElement("span");
-    tileSpan.style.display = "inline-block";
-    tileSpan.style.width = "30px";
-    tileSpan.style.height = "30px";
-    tileSpan.style.margin = "5px";
-    tileSpan.style.backgroundColor = color;
+    const img = document.createElement("img");
+    // This will look for assets/tile-blue.svg, etc.
+    img.src = "assets/tile-" + color + ".svg"; 
+    img.alt = color + " tile";
+    img.style.width = "30px";
+    img.style.height = "30px";
+    img.style.margin = "5px";
+    img.style.display = "inline-block";
+    
+    // Fallback background color in case the SVG isn't made yet
+    img.style.backgroundColor = color; 
     if (color === "white") {
-        tileSpan.style.border = "1px solid black";
+        img.style.border = "1px solid black";
     }
-    return tileSpan;
+    return img;
+};
+
+const createEmptySlot = function () {
+    const div = document.createElement("div");
+    div.style.width = "30px";
+    div.style.height = "30px";
+    div.style.margin = "5px";
+    div.style.display = "inline-block";
+    div.style.border = "1px dashed #ccc";
+    return div;
 };
 
 const drawPlayerBoard = function (playerIndex, playerState) {
-    const linesContainer = document.getElementById(`p${playerIndex + 1}-pattern-lines`);
+    const linesContainer = document.getElementById("p" + (playerIndex + 1) + "-pattern-lines");
     linesContainer.innerHTML = "";
 
-    // Draw Pattern Lines
     playerState.patternLines.forEach((line, rowIndex) => {
         const rowDiv = document.createElement("div");
         rowDiv.className = "pattern-line-row";
         
-        // Draw empty slots and filled tiles right-aligned
         const capacity = rowIndex + 1;
         const emptyCount = capacity - line.length;
         
         for (let i = 0; i < emptyCount; i += 1) {
-            const emptySpan = createTileElement("lightgray");
-            rowDiv.appendChild(emptySpan);
+            rowDiv.appendChild(createEmptySlot());
         }
         line.forEach((color) => {
-            const filledSpan = createTileElement(color);
-            rowDiv.appendChild(filledSpan);
+            rowDiv.appendChild(createTileElement(color));
         });
 
-        // Click to drop tiles here (only if it is this player's turn)
         if (gameState.activePlayerIndex === playerIndex) {
             rowDiv.onclick = function () {
                 handlePatternLineClick(rowIndex);
@@ -81,17 +98,15 @@ const drawPlayerBoard = function (playerIndex, playerState) {
         linesContainer.appendChild(rowDiv);
     });
 
-    // Draw Floor Line
-    const floorDiv = document.getElementById(`p${playerIndex + 1}-floor-line`);
-    floorDiv.innerHTML = "Floor Line: ";
+    const floorDiv = document.getElementById("p" + (playerIndex + 1) + "-floor-line");
+    floorDiv.innerHTML = "<span>Floor Line: </span>";
     playerState.floorLine.forEach((color) => {
-        const span = createTileElement(color);
-        floorDiv.appendChild(span);
+        floorDiv.appendChild(createTileElement(color));
     });
 
     if (gameState.activePlayerIndex === playerIndex) {
         floorDiv.onclick = function () {
-            handlePatternLineClick(5); // 5 represents floor line
+            handlePatternLineClick(5);
         };
     }
 };
@@ -101,7 +116,6 @@ const updateUI = function () {
     const p1Board = document.getElementById("player-1-board");
     const p2Board = document.getElementById("player-2-board");
 
-    // Update Turn Indicator
     if (gameState.activePlayerIndex === 0) {
         turnIndicator.textContent = "Player 1's Turn";
         turnIndicator.className = "player-1-turn";
@@ -114,7 +128,6 @@ const updateUI = function () {
         p1Board.classList.remove("active-board");
     }
 
-    // Draw Factories
     const factoriesContainer = document.getElementById("factories-container");
     factoriesContainer.innerHTML = "<h3>Factories</h3>"; 
 
@@ -123,32 +136,27 @@ const updateUI = function () {
 
         const factoryDiv = document.createElement("div");
         factoryDiv.className = "factory";
-        factoryDiv.style.border = "2px solid #ccc";
-        factoryDiv.style.borderRadius = "50%";
-        factoryDiv.style.padding = "20px";
-        factoryDiv.style.margin = "10px";
-        factoryDiv.style.display = "inline-block";
 
         factory.forEach((tileColor) => {
-            const tileSpan = createTileElement(tileColor);
-            tileSpan.style.cursor = "pointer";
+            const tileImg = createTileElement(tileColor);
+            tileImg.style.cursor = "pointer";
 
             if (selectedPick && selectedPick.index === index && selectedPick.color === tileColor) {
-                tileSpan.style.border = "3px solid #00ff00";
+                tileImg.style.border = "3px solid #00ff00"; // Green highlight
+                tileImg.style.borderRadius = "5px";
             }
 
-            tileSpan.onclick = function () {
-                if (gameState.activePlayerIndex === 0 || gameState.activePlayerIndex === 1) { // ensure active
+            tileImg.onclick = function () {
+                if (gameState.activePlayerIndex === 0 || gameState.activePlayerIndex === 1) {
                     handleFactoryClick(index, tileColor);
                 }
             };
             
-            factoryDiv.appendChild(tileSpan);
+            factoryDiv.appendChild(tileImg);
         });
         factoriesContainer.appendChild(factoryDiv);
     });
 
-    // Draw Boards
     drawPlayerBoard(0, gameState.players[0]);
     drawPlayerBoard(1, gameState.players[1]);
 };

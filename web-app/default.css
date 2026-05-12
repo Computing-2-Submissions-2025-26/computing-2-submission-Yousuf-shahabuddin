@@ -48,7 +48,19 @@ body {
 .player-1-turn { background-color: #ffcccc; color: #990000; }
 .player-2-turn { background-color: #ccccff; color: #000099; }
 
-/* Board Styling */
+/* Board & Factory Styling */
+.factory {
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    padding: 20px;
+    margin: 10px;
+    display: inline-block;
+    min-width: 80px;
+    min-height: 80px;
+    /* You can add your factory-base.svg here later! */
+    /* background-image: url("assets/factory-base.svg"); */
+}
+
 .player-board {
     opacity: 0.5;
     transition: opacity 0.3s;
@@ -59,7 +71,9 @@ body {
     vertical-align: top;
     background-color: white;
     border-radius: 10px;
-    min-width: 300px;
+    min-width: 350px;
+    /* You can add your board-base.svg here later! */
+    /* background-image: url("assets/board-base.svg"); */
 }
 .player-board.active-board {
     opacity: 1;
@@ -80,10 +94,13 @@ body {
     background-color: #eee;
 }
 .floor-line {
+    display: flex;
+    align-items: center;
     margin-top: 10px;
     border-top: 2px solid #333;
     padding-top: 10px;
     text-align: left;
     cursor: pointer;
+    min-height: 40px;
 }
 .floor-line:hover { background-color: #fee; }
