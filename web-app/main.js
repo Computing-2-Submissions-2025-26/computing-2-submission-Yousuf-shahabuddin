@@ -21,6 +21,12 @@ const handleFactoryClick = function (factoryIndex, color) {
     updateUI();
 };
 
+// --- NEW: Handle Center Clicks ---
+const handleCenterClick = function (color) {
+    selectedPick = { source: "center", color: color };
+    updateUI();
+};
+
 const handlePatternLineClick = function (patternLineIndex) {
     if (!selectedPick) { return; }
     
@@ -32,30 +38,41 @@ const handlePatternLineClick = function (patternLineIndex) {
                 selectedPick.color, 
                 patternLineIndex
             );
+        } else if (selectedPick.source === "center") {
+            gameState = Azul.pickFromCenter(
+                gameState, 
+                selectedPick.color, 
+                patternLineIndex
+            );
         }
         
         selectedPick = null;
         updateUI();
     } catch (error) {
-        alert(error.message); // Warns user if move is illegal
+        alert(error.message); 
         selectedPick = null;
         updateUI();
     }
 };
 
-// --- NEW: Renders an <img> tag pointing to your SVGs ---
 const createTileElement = function (color) {
     const img = document.createElement("img");
-    // This will look for assets/tile-blue.svg, etc.
-    img.src = "assets/tile-" + color + ".svg"; 
-    img.alt = color + " tile";
+    
+    if (color === "first-player-token") {
+        img.src = "assets/first-player-token.svg"; 
+        img.alt = "First Player Token";
+        img.style.backgroundColor = "purple"; // Fallback color
+    } else {
+        img.src = "assets/tile-" + color + ".svg"; 
+        img.alt = color + " tile";
+        img.style.backgroundColor = color; // Fallback color
+    }
+    
     img.style.width = "30px";
     img.style.height = "30px";
     img.style.margin = "5px";
     img.style.display = "inline-block";
     
-    // Fallback background color in case the SVG isn't made yet
-    img.style.backgroundColor = color; 
     if (color === "white") {
         img.style.border = "1px solid black";
     }
@@ -128,6 +145,7 @@ const updateUI = function () {
         p1Board.classList.remove("active-board");
     }
 
+    // 1. Draw Factories
     const factoriesContainer = document.getElementById("factories-container");
     factoriesContainer.innerHTML = "<h3>Factories</h3>"; 
 
@@ -141,8 +159,8 @@ const updateUI = function () {
             const tileImg = createTileElement(tileColor);
             tileImg.style.cursor = "pointer";
 
-            if (selectedPick && selectedPick.index === index && selectedPick.color === tileColor) {
-                tileImg.style.border = "3px solid #00ff00"; // Green highlight
+            if (selectedPick && selectedPick.source === "factory" && selectedPick.index === index && selectedPick.color === tileColor) {
+                tileImg.style.border = "3px solid #00ff00"; 
                 tileImg.style.borderRadius = "5px";
             }
 
@@ -157,6 +175,40 @@ const updateUI = function () {
         factoriesContainer.appendChild(factoryDiv);
     });
 
+    // 2. Draw Center (NEW CODE)
+    const centerContainer = document.getElementById("center-container");
+    centerContainer.innerHTML = "<h3>Center</h3>";
+    const centerDiv = document.createElement("div");
+    centerDiv.style.border = "2px dashed #999";
+    centerDiv.style.padding = "20px";
+    centerDiv.style.minHeight = "40px";
+    centerDiv.style.margin = "10px auto";
+    centerDiv.style.maxWidth = "600px";
+
+    gameState.center.forEach((tileColor) => {
+        const tileImg = createTileElement(tileColor);
+        
+        // You cannot click the first player token directly
+        if (tileColor !== "first-player-token") {
+            tileImg.style.cursor = "pointer";
+            
+            if (selectedPick && selectedPick.source === "center" && selectedPick.color === tileColor) {
+                tileImg.style.border = "3px solid #00ff00"; 
+                tileImg.style.borderRadius = "5px";
+            }
+
+            tileImg.onclick = function () {
+                if (gameState.activePlayerIndex === 0 || gameState.activePlayerIndex === 1) {
+                    handleCenterClick(tileColor);
+                }
+            };
+        }
+        
+        centerDiv.appendChild(tileImg);
+    });
+    centerContainer.appendChild(centerDiv);
+
+    // 3. Draw Player Boards
     drawPlayerBoard(0, gameState.players[0]);
     drawPlayerBoard(1, gameState.players[1]);
 };
