@@ -35,12 +35,10 @@ const isLegalPlacement = function (player, color, patternLineIndex) {
     const line = player.patternLines[patternLineIndex];
     const wallRow = player.wall[patternLineIndex];
 
-    // Rule 1: Cannot mix colors
     if (line.length > 0 && line[0] !== color) {
         return false;
     }
 
-    // Rule 2: Cannot place a color you already have on that wall row
     if (wallRow.includes(color)) {
         return false;
     }
@@ -108,6 +106,41 @@ export const pickFromFactory = function (state, factoryIndex, color, patternLine
     const newActivePlayer = newState.players[newState.activePlayerIndex];
     placeTilesInPatternLine(newActivePlayer, pickedTiles, patternLineIndex);
     
+    newState.activePlayerIndex = (newState.activePlayerIndex + 1) % newState.players.length;
+    
+    return newState;
+};
+
+// --- NEW FUNCTION: Picking from the Center ---
+export const pickFromCenter = function (state, color, patternLineIndex) {
+    const activePlayer = state.players[state.activePlayerIndex];
+    
+    if (!isLegalPlacement(activePlayer, color, patternLineIndex)) {
+        throw new Error("Illegal move! You cannot place that color there.");
+    }
+
+    const newState = cloneState(state);
+    const newActivePlayer = newState.players[newState.activePlayerIndex];
+    
+    // 1. Check if the first player token is in the center
+    if (newState.center.includes("first-player-token")) {
+        // Remove it from center
+        newState.center = newState.center.filter((t) => t !== "first-player-token");
+        // Put it in the player's floor line
+        newActivePlayer.floorLine.push("first-player-token");
+        newActivePlayer.hasFirstPlayerToken = true;
+    }
+
+    // 2. Take chosen colors
+    const pickedTiles = newState.center.filter((t) => t === color);
+    const remainingTiles = newState.center.filter((t) => t !== color);
+    
+    newState.center = remainingTiles;
+    
+    // 3. Place them in the pattern line
+    placeTilesInPatternLine(newActivePlayer, pickedTiles, patternLineIndex);
+    
+    // 4. Advance turn
     newState.activePlayerIndex = (newState.activePlayerIndex + 1) % newState.players.length;
     
     return newState;
