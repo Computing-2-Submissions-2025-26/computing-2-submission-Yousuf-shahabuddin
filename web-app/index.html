@@ -1,9 +1,46 @@
-<!-- In HTML Comments are written like this -->
-<!-- They can all be removed for your apps -->
-<!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
-<html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
-<meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
-<title>Your Web-app Title</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
-<link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
-<link rel="icon" href="./assets/favicon.png"> <!-- Import 'Favorites Icon' – favicon.png -->
-<script type="module" src="main.js"></script> <!-- Load the main script. Must be type="module". Have only one of these -->
+<!doctype html>
+<html lang="en-gb">
+<head>
+    <meta charset="utf-8">
+    <title>Azul Web Game</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="icon" href="./assets/favicon.png">
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <div id="instruction-modal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to Azul</h2>
+            <p><strong>Goal:</strong> Score the most points by tiling the walls of the Royal Palace.</p>
+            <p><strong>Turn:</strong> Pick tiles of one color from a Factory or the Center, and place them in your Pattern Lines.</p>
+            <p><strong>Wall-tiling:</strong> Complete Pattern Lines move to the Wall to score points!</p>
+            <button id="start-game-btn">Play Game</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>AZUL</h1>
+        <h2 id="turn-indicator" class="player-1-turn">Player 1's Turn</h2>
+    </header>
+
+    <main id="game-board">
+        <section id="factories-container">
+            <h3>Factories</h3>
+            <div class="factory" data-index="0">
+                <img src="assets/factory-placeholder.svg" alt="Factory 1">
+            </div>
+            </section>
+
+        <section id="player-boards-container">
+            <div id="player-1-board" class="player-board active-board">
+                <h3>Player 1 Board</h3>
+                <img src="assets/board-placeholder.svg" alt="Player 1 Board">
+            </div>
+            <div id="player-2-board" class="player-board">
+                <h3>Player 2 Board</h3>
+                <img src="assets/board-placeholder.svg" alt="Player 2 Board">
+            </div>
+        </section>
+    </main>
+</body>
+</html>
