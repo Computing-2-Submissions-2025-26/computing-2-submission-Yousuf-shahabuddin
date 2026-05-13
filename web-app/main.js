@@ -64,6 +64,7 @@ const handlePatternLineClick = function (patternLineIndex) {
 
 const createTileElement = function (color, isFaded = false) {
     const img = document.createElement("img");
+    img.className = "game-tile";
 
     if (color === "first-player-token") {
         img.src = "assets/first-player-token.svg";
@@ -74,11 +75,6 @@ const createTileElement = function (color, isFaded = false) {
         img.alt = color + " tile";
         img.style.backgroundColor = color;
     }
-
-    img.style.width = "30px";
-    img.style.height = "30px";
-    img.style.margin = "2px";
-    img.style.display = "inline-block";
 
     if (color === "white") {
         img.style.border = "1px solid black";
@@ -91,11 +87,7 @@ const createTileElement = function (color, isFaded = false) {
 
 const createEmptySlot = function () {
     const div = document.createElement("div");
-    div.style.width = "30px";
-    div.style.height = "30px";
-    div.style.margin = "2px";
-    div.style.display = "inline-block";
-    div.style.border = "1px dashed #ccc";
+    div.className = "game-tile empty-slot";
     return div;
 };
 
