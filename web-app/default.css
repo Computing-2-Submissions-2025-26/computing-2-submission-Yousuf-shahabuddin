@@ -1,23 +1,85 @@
-body { font-family: sans-serif; margin: 0; padding: 20px; background-color: #f4f4f9; text-align: center; }
-.modal { display: flex; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f9;
+    text-align: center;
+}
+.modal {
+    display: flex; position: fixed; z-index: 100; left: 0; top: 0;
+    width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+    justify-content: center; align-items: center;
+}
 .modal.hidden { display: none; }
-.modal-content { background-color: white; padding: 30px; border-radius: 10px; }
-.modal-content button { padding: 10px 20px; background-color: #0078d7; color: white; border: none; cursor: pointer; }
-#turn-indicator { padding: 10px; border-radius: 5px; display: inline-block; }
+.modal-content {
+    background-color: white; padding: 30px; border-radius: 10px;
+}
+.modal-content button {
+    padding: 10px 20px; background-color: #0078d7; color: white;
+    border: none; cursor: pointer;
+}
+#turn-indicator {
+    padding: 10px; border-radius: 5px; display: inline-block;
+}
 .player-1-turn { background-color: #ffcccc; color: #990000; }
 .player-2-turn { background-color: #ccccff; color: #000099; }
-.factory { border: 2px solid #ccc; border-radius: 50%; padding: 20px; margin: 10px; display: inline-block; min-width: 80px; min-height: 80px; }
-.player-board { opacity: 0.5; margin: 10px; padding: 20px; border: 2px solid transparent; display: inline-block; vertical-align: top; background-color: white; border-radius: 10px; min-width: 450px; }
+.factory {
+    border: 2px solid #ccc; border-radius: 50%; padding: 20px;
+    margin: 10px; display: inline-block; min-width: 80px; min-height: 80px;
+}
+.player-board {
+    opacity: 0.5; margin: 10px; padding: 20px; border: 2px solid transparent;
+    display: inline-block; vertical-align: top; background-color: white;
+    border-radius: 10px; min-width: 450px;
+}
 .player-board.active-board { opacity: 1; border: 2px solid gold; }
 .score-display { float: right; color: #0078d7; }
 
-/* New Layout for Board */
-.board-layout { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 10px; }
+/* Layout for Board */
+.board-layout {
+    display: flex; justify-content: center; align-items: center;
+    gap: 20px; margin-bottom: 10px;
+}
 .pattern-lines { display: flex; flex-direction: column; align-items: flex-end; }
-.wall-grid { display: flex; flex-direction: column; border-left: 2px solid #ccc; padding-left: 20px; }
+.wall-grid {
+    display: flex; flex-direction: column; border-left: 2px solid #ccc;
+    padding-left: 20px;
+}
 .wall-row { display: flex; }
-
-.pattern-line-row { display: flex; margin-bottom: 5px; cursor: pointer; padding: 2px; }
+.pattern-line-row {
+    display: flex; margin-bottom: 5px; cursor: pointer; padding: 2px;
+}
 .pattern-line-row:hover { background-color: #eee; }
-.floor-line { display: flex; align-items: center; margin-top: 10px; border-top: 2px solid #333; padding-top: 10px; min-height: 40px; cursor: pointer; }
+.floor-line {
+    display: flex; align-items: center; margin-top: 10px;
+    border-top: 2px solid #333; padding-top: 10px; min-height: 40px; cursor: pointer;
+}
 .floor-line:hover { background-color: #fee; }
+/* --- NEW: Fix Jitter and Add Smooth Shadows --- */
+* {
+    /* This stops borders/padding from changing the width of elements */
+    box-sizing: border-box; 
+}
+
+img {
+    /* Makes hover effects and selections smooth instead of snappy */
+    transition: all 0.2s ease-in-out; 
+}
+
+img:hover {
+    transform: scale(1.1); /* Slight pop out effect on hover */
+}
+
+/* --- NEW: Bag and Box Panel Styling --- */
+.game-info-panel {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    background-color: #e9e9f0;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-flex;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}

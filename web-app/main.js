@@ -184,6 +184,11 @@ const updateUI = function () {
         p1Board.classList.remove("active-board");
     }
 
+    // Update the Bag and Box counts on screen ---
+    document.getElementById("bag-count").textContent = gameState.bag.length;
+    document.getElementById("box-count").textContent = gameState.box.length;
+
+
     const factoriesContainer = document.getElementById("factories-container");
     factoriesContainer.innerHTML = "<h3>Factories</h3>";
 
@@ -209,7 +214,10 @@ const updateUI = function () {
             }
 
             if (isSelectedFactory) {
-                tileImg.style.border = "3px solid #00ff00";
+                // Replaced border with a smooth glowing shadow and slight lift
+                tileImg.style.boxShadow = "0 0 10px 4px rgba(0, 255, 0, 0.8)";
+                tileImg.style.borderRadius = "5px";
+                tileImg.style.transform = "translateY(-3px) scale(1.15)";
             }
 
             tileImg.onclick = function () {
@@ -246,8 +254,11 @@ const updateUI = function () {
                 }
             }
 
-            if (isSelectedCenter) {
-                tileImg.style.border = "3px solid #00ff00";
+            if (isSelectedFactory) {
+                // Replaced border with a smooth glowing shadow and slight lift
+                tileImg.style.boxShadow = "0 0 10px 4px rgba(0, 255, 0, 0.8)";
+                tileImg.style.borderRadius = "5px";
+                tileImg.style.transform = "translateY(-3px) scale(1.15)";
             }
 
             tileImg.onclick = function () {
