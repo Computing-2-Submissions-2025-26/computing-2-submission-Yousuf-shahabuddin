@@ -1,4 +1,4 @@
-import * as Azul from "./Module.js";
+import * as Azul from "./module.js";
 
 let gameState;
 let selectedPick = null;
