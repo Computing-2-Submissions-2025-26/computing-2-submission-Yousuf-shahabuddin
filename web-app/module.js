@@ -12,9 +12,20 @@ const WALL_PATTERN = [
 ];
 
 const shuffle = function (array) {
-    return array.slice().sort(function () {
-        return Math.random() - 0.5;
-    });
+    const result = array.slice();
+    let currentIndex = result.length;
+    let randomIndex;
+    let temp;
+
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temp = result[currentIndex];
+        result[currentIndex] = result[randomIndex];
+        result[randomIndex] = temp;
+    }
+
+    return result;
 };
 
 const cloneState = function (state) {
