@@ -11,8 +11,8 @@
     <div id="instruction-modal" class="modal">
         <div class="modal-content">
             <h2>Welcome to Azul</h2>
-            <p><strong>Goal:</strong> Score the most points by tiling the walls of the Royal Palace.</p>
-            <p><strong>Turn:</strong> Pick tiles of one color from a Factory or the Center, and place them in your Pattern Lines.</p>
+            <p><strong>Goal:</strong> Score the most points by tiling the walls.</p>
+            <p><strong>Turn:</strong> Pick tiles of one color from a Factory or Center.</p>
             <button id="start-game-btn">Play Game</button>
         </div>
     </div>
@@ -20,6 +20,14 @@
     <header>
         <h1>AZUL</h1>
         <h2 id="turn-indicator" class="player-1-turn">Player 1's Turn</h2>
+        <div id="game-info" class="game-info-panel">
+            <div class="bag-container">
+                <strong>👜 Cloth Bag:</strong> <span id="bag-count">100</span> tiles
+            </div>
+            <div class="box-container">
+                <strong>📦 Discard Box:</strong> <span id="box-count">0</span> tiles
+            </div>
+        </div>
     </header>
 
     <main id="game-board">
