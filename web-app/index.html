@@ -1,58 +1,241 @@
 <!doctype html>
 <html lang="en-gb">
 <head>
-    <meta charset="utf-8">
-    <title>Azul Web Game</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="icon" href="./assets/favicon.png">
-    <script type="module" src="main.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azul</title>
+<link rel="stylesheet" href="default.css">
+<link rel="icon" href="./assets/favicon.svg">
+<script type="module" src="main.js"></script>
 </head>
 <body>
-    <div id="instruction-modal" class="modal">
-        <div class="modal-content">
-            <h2>Welcome to Azul</h2>
-            <p><strong>Goal:</strong> Score the most points by tiling the walls.</p>
-            <p><strong>Turn:</strong> Pick tiles of one color from a Factory or Center.</p>
-            <button id="start-game-btn">Play Game</button>
+
+<main id="app">
+
+    <!-- ================================================================
+         SETUP SCREEN: player count, names, and full rules
+         ================================================================ -->
+    <section id="setup-screen" class="screen overlay" aria-labelledby="setup-heading">
+        <div class="setup-card">
+            <h1 class="setup-title">AZUL</h1>
+            <p class="setup-tagline">A tile-laying game by Michael Kiesling</p>
+
+            <form id="setup-form" novalidate>
+                <fieldset class="setup-field">
+                    <legend>Number of players</legend>
+                    <div class="count-options" role="radiogroup">
+                        <label class="count-option">
+                            <input type="radio" name="player-count" value="2" checked>
+                            <span>2</span>
+                        </label>
+                        <label class="count-option">
+                            <input type="radio" name="player-count" value="3">
+                            <span>3</span>
+                        </label>
+                        <label class="count-option">
+                            <input type="radio" name="player-count" value="4">
+                            <span>4</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="setup-field">
+                    <legend>Player names</legend>
+                    <div id="player-names" class="player-names"></div>
+                </fieldset>
+
+                <button type="submit" class="primary-button">Start game</button>
+            </form>
+
+            <details class="rules-panel">
+                <summary>How to play</summary>
+
+                <h3>The goal</h3>
+                <p>
+                    Score the most points by decorating the wall of your
+                    player board with coloured tiles. The game ends after
+                    any round in which a player has completed a full
+                    horizontal row of five tiles on their wall.
+                </p>
+
+                <h3>Each round (Factory Offer)</h3>
+                <ol>
+                    <li>
+                        On your turn, pick <strong>all tiles of one
+                        colour</strong> from one factory display
+                        <strong>or</strong> from the centre of the table.
+                    </li>
+                    <li>
+                        If you picked from a factory, the leftover tiles
+                        in that factory slide into the centre.
+                    </li>
+                    <li>
+                        The first player to pick from the centre each
+                        round also takes the <strong>1</strong>
+                        first-player token. The token goes on their floor
+                        line (costing a point) and decides who starts
+                        next round.
+                    </li>
+                    <li>
+                        Place all the tiles you picked onto
+                        <strong>one</strong> of your five pattern lines.
+                        Line 1 holds 1 tile; line 5 holds 5.
+                    </li>
+                    <li>
+                        Tiles in a pattern line must all be the same
+                        colour, and the colour cannot already be in the
+                        corresponding row of your wall.
+                    </li>
+                    <li>
+                        Any tiles you can't place (or pick to discard)
+                        fall on your floor line.
+                    </li>
+                </ol>
+
+                <h3>End of round (Wall-tiling)</h3>
+                <p>
+                    Each <strong>complete</strong> pattern line moves
+                    one tile onto the matching colour space in its wall
+                    row. You score immediately:
+                </p>
+                <ul>
+                    <li>If the new tile has no neighbours, score 1.</li>
+                    <li>
+                        Otherwise count every tile connected to it
+                        horizontally and vertically (including the new
+                        tile itself). Add both runs to your score.
+                    </li>
+                </ul>
+                <p>
+                    Then subtract floor-line penalties (-1, -1, -2, -2,
+                    -2, -3, -3 for the seven floor positions). Your
+                    score cannot drop below zero.
+                </p>
+
+                <h3>End of game (Bonus)</h3>
+                <ul>
+                    <li>+2 per complete <strong>horizontal row</strong></li>
+                    <li>+7 per complete <strong>vertical column</strong></li>
+                    <li>+10 per <strong>colour</strong> with all 5 placed</li>
+                </ul>
+                <p>
+                    Highest score wins. Ties broken by more completed
+                    rows.
+                </p>
+            </details>
         </div>
-    </div>
+    </section>
 
-    <header>
-        <h1>AZUL</h1>
-        <h2 id="turn-indicator" class="player-1-turn">Player 1's Turn</h2>
-        <div id="game-info" class="game-info-panel">
-            <div class="bag-container">
-                <strong>👜 Cloth Bag:</strong> <span id="bag-count">100</span> tiles
+    <!-- ================================================================
+         GAME SCREEN: full-viewport layout, never scrolls
+         ================================================================ -->
+    <section id="game-screen" class="screen hidden" aria-labelledby="game-heading">
+        <h2 id="game-heading" class="visually-hidden">Game in progress</h2>
+
+        <!-- Top bar: title, round number, status, supply, controls -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <span class="brand">AZUL</span>
+                <span class="round-pill">Round <span id="round-number">1</span></span>
             </div>
-            <div class="box-container">
-                <strong>📦 Discard Box:</strong> <span id="box-count">0</span> tiles
+            <div class="top-bar-status" id="status-message" aria-live="polite">
+                Pick a colour to play.
+            </div>
+            <div class="top-bar-right">
+                <span class="supply-mini" title="Tile bag">
+                    <img src="./assets/bag.svg" alt="" class="supply-mini-icon">
+                    <span id="bag-count">0</span>
+                </span>
+                <span class="supply-mini" title="Discard box">
+                    <img src="./assets/box.svg" alt="" class="supply-mini-icon">
+                    <span id="box-count">0</span>
+                </span>
+                <button id="contrast-button" class="text-button" type="button" title="Toggle high contrast mode for colour-blindness">
+                    Contrast
+                </button>
+                <button id="bonus-button" class="text-button" type="button" title="Bonus scoring (end of game)">
+                    Bonus
+                </button>
+                <button id="quit-button" class="text-button" type="button">Quit</button>
             </div>
         </div>
-    </header>
 
-    <main id="game-board">
-        <section id="factories-container"></section>
-        <section id="center-container"></section>
-
-        <section id="player-boards-container">
-            <div id="player-1-board" class="player-board active-board">
-                <h3>Player 1 <span id="p1-score" class="score-display">0</span></h3>
-                <div class="board-layout">
-                    <div id="p1-pattern-lines" class="pattern-lines"></div>
-                    <div id="p1-wall" class="wall-grid"></div>
-                </div>
-                <div id="p1-floor-line" class="floor-line">Floor Line: </div>
+        <!-- Middle: factories + centre -->
+        <div class="play-area">
+            <div class="factories-zone">
+                <div class="factories" id="factories"></div>
             </div>
-
-            <div id="player-2-board" class="player-board">
-                <h3>Player 2 <span id="p2-score" class="score-display">0</span></h3>
-                <div class="board-layout">
-                    <div id="p2-pattern-lines" class="pattern-lines"></div>
-                    <div id="p2-wall" class="wall-grid"></div>
-                </div>
-                <div id="p2-floor-line" class="floor-line">Floor Line: </div>
+            <div class="center-zone">
+                <h3 class="zone-heading">Centre</h3>
+                <div class="center" id="center"></div>
             </div>
-        </section>
-    </main>
+        </div>
+
+        <!-- Bottom: all player boards in a row, vertically centered -->
+        <div class="boards-row-wrapper">
+            <div class="boards-row" id="boards-row"></div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         BONUS REFERENCE OVERLAY (toggled by Bonus button)
+         ================================================================ -->
+    <section id="bonus-overlay" class="overlay hidden" aria-labelledby="bonus-heading">
+        <div class="bonus-card">
+            <h2 id="bonus-heading">Bonus scoring (end of game)</h2>
+            <div class="bonus-grid">
+                <div class="bonus-item">
+                    <div class="bonus-icon horizontal"></div>
+                    <div class="bonus-value">+2</div>
+                    <div class="bonus-text">per complete horizontal row</div>
+                </div>
+                <div class="bonus-item">
+                    <div class="bonus-icon vertical"></div>
+                    <div class="bonus-value">+7</div>
+                    <div class="bonus-text">per complete vertical column</div>
+                </div>
+                <div class="bonus-item">
+                    <div class="bonus-icon colour"></div>
+                    <div class="bonus-value">+10</div>
+                    <div class="bonus-text">per colour with all 5 placed</div>
+                </div>
+            </div>
+            <button id="bonus-close-button" class="primary-button" type="button">
+                Got it
+            </button>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         ROUND SUMMARY OVERLAY
+         ================================================================ -->
+    <section id="round-summary-screen" class="overlay hidden"
+             aria-labelledby="round-summary-heading">
+        <div class="summary-card">
+            <h2 id="round-summary-heading">Round complete</h2>
+            <div class="scoreboard" id="round-scoreboard"></div>
+            <button id="next-round-button" class="primary-button" type="button">
+                Next round
+            </button>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         GAME OVER OVERLAY
+         ================================================================ -->
+    <section id="game-over-screen" class="overlay hidden"
+             aria-labelledby="game-over-heading">
+        <div class="summary-card">
+            <h2 id="game-over-heading">Game over</h2>
+            <div id="winner-announcement" class="winner-announcement"></div>
+            <div class="scoreboard" id="final-scoreboard"></div>
+            <button id="new-game-button" class="primary-button" type="button">
+                New game
+            </button>
+        </div>
+    </section>
+
+</main>
+
 </body>
 </html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" shape-rendering="crispEdges">
+  <defs>
+    <g id="gb">
+      <rect width="16" height="16" fill="#201a1d" />
+      <path d="M0 0h3v1H0zM4 2h2v1H4zM10 1h2v1h-2zM13 4h3v1h-3zM1 6h2v1H1zM7 7h1v1H7zM11 9h2v1h-2zM2 11h3v1H2zM14 13h2v1h-2zM6 14h2v1H6z" fill="#2d2429"/>
+      <path d="M2 3h1v1H2zM8 4h1v1H8zM12 6h1v1h-1zM4 9h1v1H4zM9 11h1v1H9zM1 14h1v1H1z" fill="#141113"/>
+      <path d="M3 4h2v1H3zM10 5h2v1h-2zM11 6h1v2h-1zM6 10h2v1H6zM12 12h2v1h-2z" fill="#f0c345"/>
+      <path d="M5 4h1v1H5zM12 5h1v1h-1zM10 6h1v1h-1zM11 8h1v1h-1zM8 10h1v1H8zM14 12h1v1h-1z" fill="#a7751f"/>
+    </g>
+  </defs>
+  
+  <use href="#gb" x="0" y="0" />
+  <use href="#gb" x="16" y="0" />
+  <use href="#gb" x="32" y="0" />
+  <use href="#gb" x="0" y="16" />
+  <use href="#gb" x="16" y="16" />
+  <use href="#gb" x="32" y="16" />
+</svg>

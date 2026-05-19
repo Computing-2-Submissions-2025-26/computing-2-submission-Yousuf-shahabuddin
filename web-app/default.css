@@ -1,149 +1,1012 @@
-* {
+/* ====================================================================
+   Azul — visual design
+   --------------------------------------------------------------------
+   This stylesheet is laid out so the game screen always fits one
+   viewport. The setup screen and modal-style overlays (round summary,
+   game over, bonus reference) sit on top of the page as overlays.
+
+   The game screen itself is a CSS grid:
+
+       +--------------------------------+
+       | top bar (auto)                 |
+       +--------------------------------+
+       | factories + centre (auto)      |
+       +--------------------------------+
+       | boards row (1fr - takes rest)  |
+       +--------------------------------+
+
+   Tiles are sized with clamp() so they shrink on small viewports
+   without ever overflowing.
+   ==================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+    /* Palette */
+    --color-paper:        #fdfaf2;
+    --color-paper-dim:    #f5ecd4;
+    --color-paper-dark:   #e8dcc4;
+    --color-ink:          #1a1a1a;
+    --color-ink-soft:     #525252;
+    --color-azul:         #1f5fb4;
+    --color-azul-dark:    #144a8e;
+    --color-gold:         #8b6914;
+    --color-gold-soft:    #b89968;
+    --color-rule:         #d4cdb8;
+
+    /* Tile colours - matched to the SVGs */
+    --tile-blue:   #1f5fb4;
+    --tile-yellow: #f1c40f;
+    --tile-red:    #c0392b;
+    --tile-black:  #2c3e50;
+    --tile-white:  #fafafa;
+
+    /* Typography */
+    --font-display: "Cormorant Garamond", Georgia, serif;
+    --font-body:    "Inter", system-ui, sans-serif;
+
+    /* Tile sizing: shrinks based on viewport, never below 14px or above 50px.
+       The board tile uses both width and height to scale on tall
+       viewports while staying usable on short ones. */
+    --tile-size: clamp(18px, 2.2vw, 40px);
+    --tile-size-board: clamp(20px, min(2.5vw, 5vh), 44px);
+    --slot-size: var(--tile-size);
+    --gap: clamp(2px, 0.3vw, 5px);
+}
+
+/* ====================================================================
+   Reset and base
+   ==================================================================== */
+
+*, *::before, *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* 1. LOCK THE VIEWPORT */
-body {
-    font-family: sans-serif;
-    margin: 0; 
-    padding: 0; 
-    width: 100vw;
+html, body {
     height: 100vh;
-    overflow: hidden; 
-    background-color: #f4f4f9; 
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-}
-
-/* 2. DYNAMIC APP LAYOUT */
-header {
-    flex-shrink: 0; 
-    padding: 1vh 0;
-}
-
-#game-board {
-    flex-grow: 1; 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly; 
+    width: 100vw;
     overflow: hidden;
 }
 
-#player-boards-container {
+body {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+    background-image: url("./assets/background.svg");
+    background-repeat: repeat;
+    line-height: 1.4;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+input, select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+fieldset {
+    border: none;
+}
+
+legend {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* ====================================================================
+   Top-level layout
+   ====================================================================
+   #app fills the viewport. Only one screen is visible at a time. The
+   game screen is itself a grid; overlays float on top. */
+
+#app {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+.screen.hidden,
+.overlay.hidden {
+    display: none !important;
+}
+
+/* ====================================================================
+   Setup screen (overlay)
+   ==================================================================== */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.5);
     display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 2vw;
-    padding: 0 2vw;
-}
-
-/* 3. RESPONSIVE GAME PIECES (Using vmin) */
-.game-tile {
-    width: 3.5vmin;
-    height: 3.5vmin;
-    margin: 0.2vmin;
-    display: inline-block;
-    transition: all 0.2s ease-in-out;
-}
-
-.empty-slot {
-    border: 1px dashed #ccc;
-}
-
-img.game-tile:hover {
-    transform: scale(1.1);
-}
-
-/* 4. RESTORED STYLES (Tweaked for scaling) */
-.modal {
-    display: flex; position: fixed; z-index: 100; left: 0; top: 0;
-    width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
-    justify-content: center; align-items: center;
-}
-.modal.hidden { display: none; }
-.modal-content {
-    background-color: white; padding: 3vmin; border-radius: 10px;
-}
-.modal-content button {
-    padding: 10px 20px; background-color: #0078d7; color: white;
-    border: none; cursor: pointer;
-}
-#turn-indicator {
-    padding: 1vmin; border-radius: 5px; display: inline-block;
-    margin: 0.5vh 0;
-}
-.player-1-turn { background-color: #ffcccc; color: #990000; }
-.player-2-turn { background-color: #ccccff; color: #000099; }
-.game-info-panel {
-    display: flex; justify-content: center; gap: 3vw;
-    font-size: 1.8vmin; background-color: #e9e9f0;
-    padding: 1vh 2vw; border-radius: 8px; box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-    margin: 0 auto;
-    width: fit-content;
-}
-
-#factories-container, #center-container {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap; 
+    justify-content: center;
+    padding: 2rem;
+    z-index: 100;
+    overflow-y: auto;
 }
 
-#factories-container h3, #center-container h3 {
-    width: 100%; 
-    margin: 0.5vh 0;
-    font-size: 2vmin;
+.setup-card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 8px;
+    padding: 2rem 2.5rem;
+    max-width: 560px;
+    width: 100%;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.setup-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+    color: var(--color-azul);
+    text-align: center;
+    line-height: 1;
+}
+
+.setup-tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--color-gold);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.setup-field {
+    margin-bottom: 1.25rem;
+}
+
+.count-options {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.count-option {
+    flex: 1;
+    cursor: pointer;
+    position: relative;
+}
+
+.count-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.count-option span {
+    display: block;
+    text-align: center;
+    padding: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 4px;
+    background: white;
+    transition: all 0.15s ease;
+}
+
+.count-option:hover span {
+    border-color: var(--color-azul);
+}
+
+.count-option input:checked + span {
+    border-color: var(--color-azul);
+    background: var(--color-paper-dim);
+    color: var(--color-azul);
+}
+
+.count-option input:focus-visible + span {
+    outline: 2px solid var(--color-azul);
+    outline-offset: 2px;
+}
+
+.player-names {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.player-name-row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.player-name-row label {
+    font-size: 0.85rem;
+    color: var(--color-ink-soft);
+    font-weight: 500;
+}
+
+.player-name-row input[type="text"] {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 4px;
+    background: white;
+}
+
+/* Rules panel inside setup card */
+.rules-panel {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--color-rule);
+    padding-top: 1rem;
+}
+
+.rules-panel summary {
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-azul);
+    padding: 0.25rem 0;
+}
+
+.rules-panel summary:hover {
+    color: var(--color-azul-dark);
+}
+
+.rules-panel h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-gold);
+    margin-top: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+.rules-panel p, .rules-panel ol, .rules-panel ul {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.rules-panel ol, .rules-panel ul {
+    padding-left: 1.25rem;
+}
+
+.rules-panel li {
+    margin-bottom: 0.25rem;
+}
+
+/* ====================================================================
+   Buttons
+   ==================================================================== */
+
+.primary-button {
+    background: var(--color-azul);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: var(--color-azul-dark);
+}
+
+.primary-button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.primary-button:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+.text-button {
+    color: var(--color-ink-soft);
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-rule);
+    border-radius: 3px;
+}
+
+.text-button:hover {
+    color: var(--color-azul);
+    text-decoration-color: var(--color-azul);
+}
+
+/* ====================================================================
+   Game screen layout (the no-scroll grid)
+   ==================================================================== */
+
+#game-screen {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+}
+
+/* The boards row uses auto-sized content with its own internal padding,
+   so the boards size to fit their content; the 1fr cell in the grid
+   above gives them room but they don't have to stretch into it. */
+.boards-row-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+}
+
+/* --- Top bar --- */
+
+.top-bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 0.75rem;
+    background: rgba(253, 250, 242, 0.92);
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 6px;
+}
+
+.top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--color-azul);
+}
+
+.round-pill {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-gold);
+    background: var(--color-paper-dim);
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-gold-soft);
+}
+
+.top-bar-status {
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.supply-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-ink);
+    font-size: 0.95rem;
+}
+
+.supply-mini-icon {
+    width: 22px;
+    height: 22px;
+}
+
+/* ====================================================================
+   Play area (factories + centre)
+   ==================================================================== */
+
+.play-area {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    background: rgba(253, 250, 242, 0.85);
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 6px;
+    align-items: center;
+    min-height: 0;
+}
+
+.zone-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+}
+
+/* Factories: each one is a circle SVG with 4 tiles in a 2x2 grid on top.
+   Sized via clamp() so they shrink with viewport. */
+.factories-zone {
+    min-width: 0;
+}
+
+.factories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(0.25rem, 0.6vw, 0.75rem);
+    justify-content: center;
 }
 
 .factory {
-    border: 2px solid #ccc; border-radius: 50%; 
-    padding: 1.5vmin; margin: 0.5vmin; 
+    --fac-size: clamp(70px, 7.5vw, 130px);
+    position: relative;
+    width: var(--fac-size);
+    height: var(--fac-size);
+    background-image: url("./assets/factory.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    width: 11vmin; 
-    height: 11vmin;
+    justify-content: center;
 }
 
-#center-container > div {
-    border: 2px dashed #999; padding: 1.5vmin; min-height: 5vmin;
-    display: flex; flex-wrap: wrap; justify-content: center;
+.factory-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+    width: calc(var(--fac-size) * 0.62);
+    height: calc(var(--fac-size) * 0.62);
+    place-items: center;
+}
+
+.factory-tiles .tile-wrapper {
+    width: 100%;
+    height: 100%;
+    max-width: var(--tile-size);
+    max-height: var(--tile-size);
+}
+
+.factory-tiles .tile-wrapper .tile {
+    width: 100%;
+    height: 100%;
+}
+
+.factory.is-empty {
+    opacity: 0.3;
+}
+
+/* Centre column */
+.center-zone {
+    min-width: 12rem;
+    max-width: 22rem;
+}
+
+.center {
+    background: var(--color-paper-dim);
+    border: 2px dashed var(--color-gold-soft);
+    border-radius: 6px;
+    padding: 0.4rem;
+    min-height: calc(var(--tile-size) + 1rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    align-content: flex-start;
+}
+
+.center.is-empty::before {
+    content: "Empty";
+    color: var(--color-ink-soft);
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 0.2rem 0;
+}
+
+/* ====================================================================
+   Player boards row
+   ====================================================================
+   All players are displayed side-by-side. Uses fr-fr-fr-fr so they
+   share the remaining vertical space equally. The active player is
+   accented but not enlarged. */
+
+.boards-row {
+    display: grid;
+    grid-template-columns: repeat(var(--board-count, 2), 1fr);
+    gap: 0.5rem;
+    width: 100%;
+    height: auto;
+    align-self: center;
+    padding: 3px;  /* room for the active-player border to show without clipping */
+    /* Board content needs ~13 tiles wide (5 pattern + 1 divider + 5 wall + gaps).
+       So each tile gets ~ (viewport - padding - gaps) / (13 * board_count).
+       This keeps content fitting horizontally regardless of player count. */
+    --tile-size-board: clamp(
+        14px,
+        min(
+            calc((100vw - 4rem) / (var(--board-count, 2) * 13)),
+            5vh
+        ),
+        44px
+    );
 }
 
 .player-board {
-    padding: 2vmin; border: 4px solid transparent;
-    background-color: white; border-radius: 10px; 
-    transition: all 0.3s ease;
-    flex: 1; 
-    max-width: 48%; 
+    background-image: url("./assets/player-board.svg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    --tile-size: var(--tile-size-board);
+    --slot-size: var(--tile-size-board);
+    transition: box-shadow 0.2s ease;
 }
-.player-board.active-board {
-    border: 4px solid gold;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-}
-.player-board h3 { margin-top: 0; font-size: 2.2vmin; }
-.score-display { float: right; color: #0078d7; }
 
-.board-layout {
-    display: flex; justify-content: center; align-items: center;
-    gap: 2vmin; margin-bottom: 1vh;
+.player-board.is-active {
+    outline: 3px solid var(--color-azul);
+    outline-offset: 0px;
 }
-.pattern-lines { display: flex; flex-direction: column; align-items: flex-end; }
-.wall-grid {
-    display: flex; flex-direction: column; border-left: 2px solid #ccc;
-    padding-left: 2vmin;
+
+.player-board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-gold-soft);
+    min-width: 0;
 }
-.wall-row { display: flex; }
-.pattern-line-row {
-    display: flex; margin-bottom: 0.5vmin; cursor: pointer; padding: 2px;
+
+.player-board-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-azul);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
-.pattern-line-row:hover { background-color: #eee; }
+
+.player-board-score {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--color-azul);
+    flex-shrink: 0;
+}
+
+.player-board.is-active .player-board-name::before {
+    content: "▸ ";
+    color: var(--color-azul);
+}
+
+/* Board interior: pattern lines | divider | wall */
+.board-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 0.3rem;
+    justify-content: center;
+    align-items: start;
+}
+
+.pattern-lines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    align-items: flex-end;
+}
+
+.pattern-line {
+    display: flex;
+    gap: var(--gap);
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.pattern-line.is-clickable {
+    cursor: pointer;
+}
+
+.pattern-line.is-clickable:hover {
+    background: rgba(31, 95, 180, 0.12);
+}
+
+.pattern-line.is-illegal {
+    opacity: 0.45;
+}
+
+.board-divider {
+    width: 1.5px;
+    background: var(--color-gold);
+    align-self: stretch;
+    margin: 0 0.2rem;
+}
+
+.wall {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+.wall-row {
+    display: flex;
+    gap: var(--gap);
+}
+
+/* Floor line: full width below the pattern lines + wall */
+.floor-line-zone {
+    margin-top: 0.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--color-gold-soft);
+}
+
 .floor-line {
-    display: flex; align-items: center; margin-top: 1vh;
-    border-top: 2px solid #333; padding-top: 1vh; min-height: 5vmin;
-    cursor: pointer; font-size: 1.8vmin;
+    display: flex;
+    gap: var(--gap);
+    padding: 2px;
+    border-radius: 3px;
+    justify-content: center;
 }
-.floor-line span { margin-right: 1vw; }
-.floor-line:hover { background-color: #fee; }
+
+.floor-line.is-clickable {
+    cursor: pointer;
+}
+
+.floor-line.is-clickable:hover {
+    background: rgba(192, 57, 43, 0.12);
+}
+
+.floor-slot {
+    width: var(--slot-size);
+    height: var(--slot-size);
+    border: 1.5px dashed var(--color-rule);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.floor-slot-penalty {
+    position: absolute;
+    top: calc(-1.4em - 2px);
+    font-size: 0.65rem;
+    color: var(--color-ink-soft);
+    font-weight: 600;
+}
+
+/* ====================================================================
+   Tile graphics
+   ==================================================================== */
+
+.tile {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    display: block;
+}
+
+.tile-wrapper.is-clickable {
+    cursor: pointer;
+}
+
+.tile-wrapper.is-clickable:hover {
+    transform: scale(1.08);
+    transition: transform 0.12s ease;
+}
+
+.tile-wrapper.is-selected {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 5px var(--color-azul));
+    transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.tile-wrapper.is-dimmed {
+    opacity: 0.35;
+}
+
+/* Empty slots on pattern lines */
+.slot {
+    width: var(--slot-size);
+    height: var(--slot-size);
+    border: 1.5px dashed var(--color-gold-soft);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.wall-slot {
+    width: var(--slot-size);
+    height: var(--slot-size);
+    border: 1px solid var(--color-rule);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.35);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Faded "ghost" tiles on the wall to show what colour goes where */
+.wall-slot .tile-wrapper {
+    opacity: 0.18;
+}
+
+.wall-slot.is-filled {
+    background: transparent;
+    border-color: transparent;
+}
+
+.wall-slot.is-filled .tile-wrapper {
+    opacity: 1;
+}
+
+/* First-player token: rendered the same way as a tile, special icon */
+.tile.first-token {
+    background-image: url("./assets/first-player-token.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ====================================================================
+   Bonus reference overlay (toggled on demand)
+   ==================================================================== */
+
+.bonus-card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.bonus-card h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-azul);
+    margin-bottom: 1rem;
+}
+
+.bonus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.bonus-item {
+    text-align: center;
+    padding: 0.75rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    background: white;
+}
+
+.bonus-icon {
+    margin: 0 auto 0.5rem;
+    border-radius: 3px;
+}
+
+.bonus-icon.horizontal {
+    width: 56px;
+    height: 18px;
+    background: linear-gradient(90deg,
+        var(--tile-blue), var(--tile-yellow), var(--tile-red),
+        var(--tile-black), var(--tile-white));
+}
+
+.bonus-icon.vertical {
+    width: 18px;
+    height: 56px;
+    background: linear-gradient(180deg,
+        var(--tile-blue), var(--tile-yellow), var(--tile-red),
+        var(--tile-black), var(--tile-white));
+}
+
+.bonus-icon.colour {
+    width: 40px;
+    height: 40px;
+    background: var(--tile-blue);
+}
+
+.bonus-value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-azul);
+}
+
+.bonus-text {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+}
+
+/* ====================================================================
+   Round summary & game over (overlay cards)
+   ==================================================================== */
+
+.summary-card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 8px;
+    padding: 1.75rem 2rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.summary-card h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: var(--color-azul);
+    margin-bottom: 0.75rem;
+}
+
+.winner-announcement {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--color-azul);
+    margin-bottom: 1rem;
+}
+
+.scoreboard {
+    margin: 1.25rem 0 1.5rem 0;
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 6px;
+    background: white;
+    overflow: hidden;
+}
+
+.scoreboard-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--color-rule);
+    text-align: left;
+    align-items: center;
+}
+
+.scoreboard-row:last-child {
+    border-bottom: none;
+}
+
+.scoreboard-row.is-leader {
+    background: var(--color-paper-dim);
+}
+
+.scoreboard-row .score-name {
+    font-weight: 700;
+}
+
+.scoreboard-row .score-delta {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--color-ink-soft);
+    font-size: 0.85rem;
+}
+
+.scoreboard-row .score-total {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    min-width: 2.5rem;
+    text-align: right;
+    color: var(--color-azul);
+}
+
+/* ====================================================================
+   High contrast mode (colour-blindness accessibility)
+   --------------------------------------------------------------------
+   Activated by the Contrast button in the top bar. Adds a text label
+   and a distinct border style to every tile so that colour is not the
+   only distinguishing feature between tile types. Uses the data-label
+   attribute set by main.js on each .tile-wrapper element, read back
+   via CSS attr(data-label) in the ::after pseudo-element.
+   Labels: B=blue, Y=yellow, R=red, K=black, W=white (K is used for
+   black because B is already taken by blue — standard convention).
+   Border styles are chosen to be distinguishable even in greyscale.
+   ==================================================================== */
+
+.tile-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: var(--tile-size);
+    height: var(--tile-size);
+}
+
+body.high-contrast .tile-wrapper::after {
+    content: attr(data-label);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: calc(var(--tile-size) * 0.38);
+    color: white;
+    text-shadow: 0 0 3px #000, 0 0 3px #000;
+    pointer-events: none;
+}
+
+body.high-contrast .tile-wrapper[data-label="B"] .tile { outline: 3px solid #000; }
+body.high-contrast .tile-wrapper[data-label="Y"] .tile { outline: 3px dashed #000; }
+body.high-contrast .tile-wrapper[data-label="R"] .tile { outline: 3px dotted #000; }
+body.high-contrast .tile-wrapper[data-label="K"] .tile { outline: 3px double #000; }
+body.high-contrast .tile-wrapper[data-label="W"] .tile { outline: 3px solid #555; }
+
+#contrast-button.is-active {
+    color: var(--color-azul);
+    font-weight: 700;
+    text-decoration-color: var(--color-azul);
+}
+
+/* ====================================================================
+   Reduced motion preference
+   ==================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

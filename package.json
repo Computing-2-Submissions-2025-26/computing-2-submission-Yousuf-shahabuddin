@@ -2,15 +2,16 @@
   "name": "computing-2-submission",
   "type": "module",
   "version": "1.0.0",
-  "description": "",
-  "main": "web-app/Module.js",
-  "author": "",
+  "description": "Azul board game implemented as a web app for Computing 2 coursework.",
+  "main": "web-app/Azul.js",
+  "author": "Yousuf Shahabuddin",
   "license": "ISC",
   "dependencies": {
     "ramda": "^0.32.0"
   },
   "devDependencies": {
     "docdash": "^2.0.2",
+    "jsdoc": "^4.0.5",
     "mocha": "^11.7.5"
   }
 }

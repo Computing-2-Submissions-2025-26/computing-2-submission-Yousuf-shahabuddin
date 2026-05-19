@@ -1,0 +1,4101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Azul - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Azul.html">Azul</a><ul class='methods'><li data-type='method'><a href="Azul.html#.bonus_score">bonus_score</a></li><li data-type='method'><a href="Azul.html#.end_round">end_round</a></li><li data-type='method'><a href="Azul.html#.floor_penalty">floor_penalty</a></li><li data-type='method'><a href="Azul.html#.has_completed_row">has_completed_row</a></li><li data-type='method'><a href="Azul.html#.is_legal_placement">is_legal_placement</a></li><li data-type='method'><a href="Azul.html#.new_game">new_game</a></li><li data-type='method'><a href="Azul.html#.pick_from_center">pick_from_center</a></li><li data-type='method'><a href="Azul.html#.pick_from_factory">pick_from_factory</a></li><li data-type='method'><a href="Azul.html#.score_tile_placement">score_tile_placement</a></li><li data-type='method'><a href="Azul.html#.start_round">start_round</a></li><li data-type='method'><a href="Azul.html#.winners">winners</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#add_to_floor">add_to_floor</a></li><li><a href="global.html#after_pick">after_pick</a></li><li><a href="global.html#draw_tiles">draw_tiles</a></li><li><a href="global.html#empty_wall">empty_wall</a></li><li><a href="global.html#fresh_bag">fresh_bag</a></li><li><a href="global.html#new_player">new_player</a></li><li><a href="global.html#place_into_pattern_line">place_into_pattern_line</a></li><li><a href="global.html#resolve_pattern_lines">resolve_pattern_lines</a></li><li><a href="global.html#shuffled">shuffled</a></li><li><a href="global.html#wall_column_for">wall_column_for</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Azul</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+            Namespace
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+
+    
+
+    <h4 class="name" id="Azul">Azul</h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Azul.js is a module to model and play "Azul", a board game designed
+by Michael Kiesling and published by Plan B Games in 2017.
+<p>
+In Azul, two to four players are tile-laying artists decorating the
+walls of the Royal Palace of Evora. Each round, players take turns
+picking tiles from circular Factory displays (or from the centre of
+the table) and placing them on pattern lines on their player boards.
+At the end of each round, completed pattern lines are moved onto the
+wall, scoring points based on adjacent tiles. Excess tiles fall to
+the floor line and cost points. The game ends after the round in
+which any player completes a horizontal line of five tiles on their
+wall; bonus points are then awarded for completed rows, columns and
+colour sets. The highest score wins.
+</p>
+<p>
+All functions in this module are pure: they read their inputs and
+return new values without changing the inputs. Randomness in
+<a href="Azul.html#.new_game"><code>Azul.new_game</code></a> and <a href="Azul.html#.start_round"><code>Azul.start_round</code></a> (which shuffle
+the bag) is the only impurity and is confined to those functions.
+</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>2025/26</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Yousuf Shahabuddin</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".BONUS_VALUES"><span class="type-signature type-signature-static, constant">(static, constant) </span>BONUS_VALUES<span class="type-signature"> :object</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The bonus point values awarded at end-of-game.
+<ul>
+  <li><code>row</code>: 2 points per completed horizontal line of 5.</li>
+  <li><code>column</code>: 7 points per completed vertical line of 5.</li>
+  <li><code>colour</code>: 10 points per colour with all 5 tiles placed.</li>
+</ul></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line217">line 217</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The bonus point values awarded at end-of-game.
+<ul>
+  <li><code>row</code>: 2 points per completed horizontal line of 5.</li>
+  <li><code>column</code>: 7 points per completed vertical line of 5.</li>
+  <li><code>colour</code>: 10 points per colour with all 5 tiles placed.</li>
+</ul>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".COLOURS"><span class="type-signature type-signature-static, constant">(static, constant) </span>COLOURS<span class="type-signature"> :Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The five tile colours used in the game. Each appears 20 times in
+the bag, for a total of 100 tiles.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line137">line 137</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The five tile colours used in the game. Each appears 20 times in
+the bag, for a total of 100 tiles.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".FACTORY_SIZE"><span class="type-signature type-signature-static, constant">(static, constant) </span>FACTORY_SIZE<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The number of tiles dealt into each factory display each round.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line151">line 151</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The number of tiles dealt into each factory display each round.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".FLOOR_CAPACITY"><span class="type-signature type-signature-static, constant">(static, constant) </span>FLOOR_CAPACITY<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The maximum number of tiles that can sit in the floor line before
+further fallen tiles are returned to the box rather than counted.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line190">line 190</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The maximum number of tiles that can sit in the floor line before
+further fallen tiles are returned to the box rather than counted.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".FLOOR_INDEX"><span class="type-signature type-signature-static, constant">(static, constant) </span>FLOOR_INDEX<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The placeholder value used in pattern_line_index to mean
+"send these tiles to the floor line instead of any pattern line".
+Pattern line indices 0-4 are real pattern lines; this index sends
+tiles straight to the floor.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line231">line 231</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The placeholder value used in pattern_line_index to mean
+"send these tiles to the floor line instead of any pattern line".
+Pattern line indices 0-4 are real pattern lines; this index sends
+tiles straight to the floor.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".FLOOR_PENALTIES"><span class="type-signature type-signature-static, constant">(static, constant) </span>FLOOR_PENALTIES<span class="type-signature"> :Array.&lt;number></span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The penalty applied to each floor-line position. The first two
+floor-line tiles each cost 1 point, the next three each cost 2,
+and any tiles beyond that each cost 3. The floor line has space
+for seven tiles before tiles are returned to the box.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line182">line 182</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The penalty applied to each floor-line position. The first two
+floor-line tiles each cost 1 point, the next three each cost 2,
+and any tiles beyond that each cost 3. The floor line has space
+for seven tiles before tiles are returned to the box.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;number></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".MAX_PLAYERS"><span class="type-signature type-signature-static, constant">(static, constant) </span>MAX_PLAYERS<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The maximum supported player count.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line172">line 172</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The maximum supported player count.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".MIN_PLAYERS"><span class="type-signature type-signature-static, constant">(static, constant) </span>MIN_PLAYERS<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The minimum and maximum supported player counts.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line165">line 165</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The minimum and maximum supported player counts.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".PHASE"><span class="type-signature type-signature-static">(static) </span>PHASE<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The phases of the game.
+<ul>
+  <li><code>FACTORY_OFFER</code> &mdash; players take turns picking
+      tiles. The valid action is <a href="Azul.html#.pick_from_factory"><code>Azul.pick_from_factory</code></a> or
+      <a href="Azul.html#.pick_from_center"><code>Azul.pick_from_center</code></a>.</li>
+  <li><code>ROUND_OVER</code> &mdash; all factories and the centre
+      are empty. <a href="Azul.html#.end_round"><code>Azul.end_round</code></a> resolves walls and scores;
+      <a href="Azul.html#.start_round"><code>Azul.start_round</code></a> deals the next round.</li>
+  <li><code>GAME_OVER</code> &mdash; at least one player completed a
+      horizontal line of five tiles. Bonus points have been awarded
+      and <a href="Azul.html#.winners"><code>Azul.winners</code></a> returns the winning indices.</li>
+</ul></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line125">line 125</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The phases of the game.
+<ul>
+  <li><code>FACTORY_OFFER</code> &mdash; players take turns picking
+      tiles. The valid action is <a href="Azul.html#.pick_from_factory"><code>Azul.pick_from_factory</code></a> or
+      <a href="Azul.html#.pick_from_center"><code>Azul.pick_from_center</code></a>.</li>
+  <li><code>ROUND_OVER</code> &mdash; all factories and the centre
+      are empty. <a href="Azul.html#.end_round"><code>Azul.end_round</code></a> resolves walls and scores;
+      <a href="Azul.html#.start_round"><code>Azul.start_round</code></a> deals the next round.</li>
+  <li><code>GAME_OVER</code> &mdash; at least one player completed a
+      horizontal line of five tiles. Bonus points have been awarded
+      and <a href="Azul.html#.winners"><code>Azul.winners</code></a> returns the winning indices.</li>
+</ul>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".TILES_PER_COLOUR"><span class="type-signature type-signature-static, constant">(static, constant) </span>TILES_PER_COLOUR<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The number of tiles of each colour in the bag at the start of a game.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line144">line 144</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The number of tiles of each colour in the bag at the start of a game.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".WALL_PATTERN"><span class="type-signature type-signature-static, constant">(static, constant) </span>WALL_PATTERN<span class="type-signature"> :Array.&lt;Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>>></span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The colour-by-position pattern of the wall. Each colour appears
+exactly once in each row and each column. A tile of colour X in
+row R must be placed at WALL_PATTERN[R].indexOf(X).</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line199">line 199</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The colour-by-position pattern of the wall. Each colour appears
+exactly once in each row and each column. A tile of colour X in
+row R must be placed at WALL_PATTERN[R].indexOf(X).
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>>></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".WALL_SIZE"><span class="type-signature type-signature-static, constant">(static, constant) </span>WALL_SIZE<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The size (rows and columns) of each player's wall.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line158">line 158</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    The size (rows and columns) of each player's wall.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".bonus_score"><span class="type-signature type-signature-static">(static) </span>bonus_score<span class="signature">(wall)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Computes the end-of-game bonus for a completed wall: 2 points per
+complete horizontal row, 7 per complete vertical column, 10 per
+fully placed colour. Returns the breakdown as well as the total.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line797">line 797</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>wall</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.WallRow">Azul.WallRow</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The wall.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The bonus breakdown.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".end_round"><span class="type-signature type-signature-static">(static) </span>end_round<span class="signature">(game)</span><span class="type-signature"> &rarr; {<a href="Azul.html#.Game">Azul.Game</a>|undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Performs end-of-round bookkeeping: moves a tile from each complete
+pattern line onto the wall (scoring as it goes), applies floor
+penalties, clears floor lines, and returns discarded tiles to the
+box. If any player has completed a horizontal row, the phase moves
+to GAME_OVER and end-of-game bonuses are added; otherwise the
+phase becomes ROUND_OVER and <a href="Azul.html#.start_round"><code>Azul.start_round</code></a> can be called.
+Returns <code>undefined</code> if the round isn't actually over
+(factories or centre still have tiles).</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line913">line 913</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current game state.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The resolved game state, or
+         undefined if called too early.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".floor_penalty"><span class="type-signature type-signature-static">(static) </span>floor_penalty<span class="signature">(floor_line)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Computes the floor-line penalty for the given list of fallen tiles.
+Always returns a non-positive number.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line777">line 777</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>floor_line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The floor line.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The penalty (e.g. -3 for a floor of 2 tiles).
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".has_completed_row"><span class="type-signature type-signature-static">(static) </span>has_completed_row<span class="signature">(player)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Tests whether a player's wall contains a completed horizontal row.
+Completing such a row ends the game at the end of the current
+round.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line892">line 892</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>player</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Player">Azul.Player</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The player.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    True if any row of the wall is fully tiled.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".is_legal_placement"><span class="type-signature type-signature-static">(static) </span>is_legal_placement<span class="signature">(player, colour, pattern_line_index)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Tests whether placing the given colour in the given pattern line of
+the given player would be legal. Placement is legal when:
+<ul>
+  <li>The pattern line is empty, or already contains the same
+      colour; AND</li>
+  <li>The corresponding wall row does not already contain that
+      colour.</li>
+</ul>
+The <a href="Azul.html#.FLOOR_INDEX"><code>Azul.FLOOR_INDEX</code></a> pseudo-line (sending tiles straight to
+the floor) is always legal.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line377">line 377</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>player</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Player">Azul.Player</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The player making the placement.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colour</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Colour">Azul.Colour</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The tile colour being placed.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pattern_line_index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The pattern line index (0-4) or
+       <a href="Azul.html#.FLOOR_INDEX"><code>Azul.FLOOR_INDEX</code></a>.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    True if the placement is legal.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".new_game"><span class="type-signature type-signature-static">(static) </span>new_game<span class="signature">(player_names)</span><span class="type-signature"> &rarr; {<a href="Azul.html#.Game">Azul.Game</a>|undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Returns a new game state. The number of factories scales with
+player count: 2 * players + 1.
+Returns <code>undefined</code> if the player count is outside the
+supported range.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line468">line 468</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>player_names</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The display names of the
+       players. Length determines the number of players (2-4).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The initial game state ready for
+         the first round, or undefined if the count is invalid.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".pick_from_center"><span class="type-signature type-signature-static">(static) </span>pick_from_center<span class="signature">(game, colour, pattern_line_index)</span><span class="type-signature"> &rarr; {<a href="Azul.html#.Game">Azul.Game</a>|undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The active player picks every tile of one colour from the centre.
+If the first-player token is still in the centre, the player also
+takes it (it lands on their floor line as a penalty tile, and
+determines who starts next round).
+Returns <code>undefined</code> if the move is invalid: wrong phase,
+the centre contains no tile of that colour, or the placement is
+illegal.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line650">line 650</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current game state.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colour</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Colour">Azul.Colour</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The colour to pick.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pattern_line_index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The pattern line to place the
+       picked tiles in, or <a href="Azul.html#.FLOOR_INDEX"><code>Azul.FLOOR_INDEX</code></a> to send them
+       straight to the floor.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The game state after the pick, or
+         undefined if the call was invalid.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".pick_from_factory"><span class="type-signature type-signature-static">(static) </span>pick_from_factory<span class="signature">(game, factory_index, colour, pattern_line_index)</span><span class="type-signature"> &rarr; {<a href="Azul.html#.Game">Azul.Game</a>|undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The active player picks every tile of one colour from a factory.
+The picked tiles go into a pattern line (or to the floor) of the
+active player. Any other tiles in that factory are moved into the
+centre.
+Returns <code>undefined</code> if the move is invalid: wrong phase,
+factory index out of range, factory contains no tile of that
+colour, or the placement is illegal.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line582">line 582</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current game state.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>factory_index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The factory to pick from.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colour</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Colour">Azul.Colour</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The colour to pick.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pattern_line_index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The pattern line to place the
+       picked tiles in, or <a href="Azul.html#.FLOOR_INDEX"><code>Azul.FLOOR_INDEX</code></a> to send them
+       straight to the floor.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The game state after the pick, or
+         undefined if the call was invalid.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".score_tile_placement"><span class="type-signature type-signature-static">(static) </span>score_tile_placement<span class="signature">(wall, row, col)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Returns how many points placing a tile at (row, col) on a wall
+would score. Counts the horizontally-connected and vertically-
+connected tiles around the placement (inclusive of the new tile).
+The rules:
+<ul>
+  <li>If the tile has no neighbours, score 1.</li>
+  <li>Otherwise, count any horizontal run (≥2) and add it; count
+      any vertical run (≥2) and add it. A tile that is part of
+      both adds both.</li>
+</ul></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line727">line 727</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>wall</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.WallRow">Azul.WallRow</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The wall <em>after</em> the tile
+       has been placed.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row of the new tile.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>col</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The column of the new tile.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The points scored for that placement.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".start_round"><span class="type-signature type-signature-static">(static) </span>start_round<span class="signature">(game)</span><span class="type-signature"> &rarr; {<a href="Azul.html#.Game">Azul.Game</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Deals the next round: refills each factory with four tiles, clears
+the centre, and resets the first-player token to the centre. The
+starting player is whoever holds the first-player token in their
+floor line (set during the previous <a href="Azul.html#.end_round"><code>Azul.end_round</code></a>); they
+are also relieved of the token here.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line501">line 501</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current game state.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The game at the start of a new round.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".winners"><span class="type-signature type-signature-static">(static) </span>winners<span class="signature">(game)</span><span class="type-signature"> &rarr; {Array.&lt;number>|undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Returns the indices of the winner(s) of a completed game. Highest
+score wins; ties are broken by who has more completed horizontal
+rows; a remaining tie returns multiple winners.
+Returns <code>undefined</code> if the game is not over.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line960">line 960</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Azul.html#.Game">Azul.Game</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The game state.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The winning player indices,
+         or undefined if the game is not over.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;number></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".Colour">Colour</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>A tile colour. Tiles come in five colours plus the special
+"first" token (which is not a colour but lives in the centre
+and is taken by whoever picks from the centre first in a round).</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    A tile colour. Tiles come in five colours plus the special
+"first" token (which is not a colour but lives in the centre
+and is taken by whoever picks from the centre first in a round).
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".Game">Game</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>The complete state of an Azul game. Every action produces a new
+game state; states are never mutated.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>players</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.Player">Azul.Player</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The player states, in seat
+          order.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>active_player</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The index of the player whose turn
+          it is to pick tiles.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>factories</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The factory
+          displays. Each is a list of up to four tiles. An empty
+          list means the factory has been emptied this round.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>center</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The pile of tiles in the
+          centre of the table.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The tile bag (face-down draw
+          pile).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>box</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The discard box; tiles that have
+          been moved off boards. Refills the bag when it empties.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>first_token_in_center</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the first-player
+          token is currently in the centre (i.e. no-one has taken
+          it yet this round).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>round</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current round number (1 for the first).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>phase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">See <a href="Azul.html#.PHASE"><code>Azul.PHASE</code></a>.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    The complete state of an Azul game. Every action produces a new
+game state; states are never mutated.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".PatternLine">PatternLine</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>A pattern line on a player's board. There are five pattern lines,
+numbered 0 to 4. Line <em>i</em> holds up to <em>i+1</em> tiles of
+one colour. A line is "complete" when filled; at end-of-round a
+complete line contributes one tile to the wall and the rest are
+discarded.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    A pattern line on a player's board. There are five pattern lines,
+numbered 0 to 4. Line <em>i</em> holds up to <em>i+1</em> tiles of
+one colour. A line is "complete" when filled; at end-of-round a
+complete line contributes one tile to the wall and the rest are
+discarded.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".Player">Player</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>A player's full state.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The display name of the player.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>score</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The player's current score; never below 0.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pattern_lines</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.PatternLine">Azul.PatternLine</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The five pattern
+          lines (length 5, where line <em>i</em> has capacity
+          <em>i+1</em>).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wall</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.WallRow">Azul.WallRow</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The 5x5 wall. Each cell is the
+          placed colour or undefined.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>floor_line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Azul.html#.Colour">Azul.Colour</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Tiles that "fell on the
+          floor": excess tiles, illegal placements, or tiles taken
+          when the player took the first-player token.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>has_first_token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the player's floor line
+          contains the first-player token (used to start the next
+          round and counts as a penalty tile).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    A player's full state.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".WallRow">WallRow</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>A row on the wall. Each row has five cells; each cell is either
+the placed colour or undefined (not yet placed). The static
+<a href="Azul.html#.WALL_PATTERN"><code>Azul.WALL_PATTERN</code></a> dictates which column each colour
+belongs in for each row.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Azul.js.html">Azul.js</a>, <a href="Azul.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    A row on the wall. Each row has five cells; each cell is either
+the placed colour or undefined (not yet placed). The static
+<a href="Azul.html#.WALL_PATTERN"><code>Azul.WALL_PATTERN</code></a> dictates which column each colour
+belongs in for each row.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;(<a href="Azul.html#.Colour">Azul.Colour</a>|undefined)></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue May 19 2026 09:51:55 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
