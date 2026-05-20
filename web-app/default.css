@@ -1,5 +1,4 @@
-/* ====================================================================
-   Azul — visual design
+/* Azul — visual design
    --------------------------------------------------------------------
    This stylesheet is laid out so the game screen always fits one
    viewport. The setup screen and modal-style overlays (round summary,
@@ -17,7 +16,7 @@
 
    Tiles are sized with clamp() so they shrink on small viewports
    without ever overflowing.
-   ==================================================================== */
+   */
 
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;500;600;700&display=swap");
 
@@ -34,7 +33,7 @@
     --color-gold-soft:    #b89968;
     --color-rule:         #d4cdb8;
 
-    /* Tile colours - matched to the SVGs */
+    /* Tile colours - matched to the original game */
     --tile-blue:   #1f5fb4;
     --tile-yellow: #f1c40f;
     --tile-red:    #c0392b;
@@ -46,6 +45,8 @@
     --font-body:    "Inter", system-ui, sans-serif;
 
     /* Tile sizing: shrinks based on viewport, never below 14px or above 50px.
+       This is so that the text remains legible on small viewports but the game
+       doesn't look tiny on large ones.
        The board tile uses both width and height to scale on tall
        viewports while staying usable on short ones. */
     --tile-size: clamp(18px, 2.2vw, 40px);
@@ -722,9 +723,7 @@ img {
     font-weight: 600;
 }
 
-/* ====================================================================
-   Tile graphics
-   ==================================================================== */
+/* Tile graphics */
 
 .tile {
     width: 100%;
@@ -766,7 +765,7 @@ img {
 .wall-slot {
     width: var(--slot-size);
     height: var(--slot-size);
-    border: 1px solid var(--color-rule);
+    border: 1.5px solid var(--color-rule);
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.35);
     box-sizing: border-box;
@@ -779,6 +778,8 @@ img {
 /* Faded "ghost" tiles on the wall to show what colour goes where */
 .wall-slot .tile-wrapper {
     opacity: 0.18;
+    width: 100%;
+    height: 100%;
 }
 
 .wall-slot.is-filled {
@@ -952,18 +953,20 @@ img {
     color: var(--color-azul);
 }
 
-/* ====================================================================
+/*
    High contrast mode (colour-blindness accessibility)
-   --------------------------------------------------------------------
+
    Activated by the Contrast button in the top bar. Adds a text label
    and a distinct border style to every tile so that colour is not the
-   only distinguishing feature between tile types. Uses the data-label
-   attribute set by main.js on each .tile-wrapper element, read back
-   via CSS attr(data-label) in the ::after pseudo-element.
+   only distinguishing feature between tile types. Although tiles have
+   different patterns alreayd, this is used to further distinguish 
+   between them. Uses the data-label attribute set by main.js on each
+   .tile-wrapper element, read back via CSS attr(data-label) in the 
+   ::after pseudo-element.
    Labels: B=blue, Y=yellow, R=red, K=black, W=white (K is used for
    black because B is already taken by blue — standard convention).
    Border styles are chosen to be distinguishable even in greyscale.
-   ==================================================================== */
+   */
 
 .tile-wrapper {
     position: relative;
@@ -972,6 +975,15 @@ img {
     width: var(--tile-size);
     height: var(--tile-size);
 }
+
+/* Wall tiles fill their slot exactly so wall and pattern lines align.
+Without this, the tiles burst of their borders and leads to a mistmatch
+between the two grids on the player boards, where the spacign between
+rows is not identical.
+.wall-slot .tile-wrapper {
+    width: 100%;
+    height: 100%;
+}*/
 
 body.high-contrast .tile-wrapper::after {
     content: attr(data-label);
