@@ -207,7 +207,8 @@ describe("Picking from a factory", function () {
                 "factories": [["blue", "blue", "yellow", "red"], [], [], [], []]
             });
             const after = Azul.pick_from_factory(game, 0, "blue", 1);
-            assert.deepEqual(after.players[0].pattern_lines[1], ["blue", "blue"]);
+            assert.deepEqual(after.players[0].pattern_lines[1],
+                 ["blue", "blue"]);
         });
     it("moves the leftover tiles into the centre", function () {
         const game = make_game({
@@ -700,7 +701,8 @@ describe("Tile conservation", function () {
     it("conserves the total tile count when picking from a factory",
         function () {
             const game = make_game({
-                "factories": [["blue", "blue", "yellow", "red"], [], [], [], []],
+                "factories": [["blue", "blue", "yellow", "red"],
+                 [], [], [], []],
                 "bag": Array(80).fill("blue")
             });
             const before = count_tiles(game);

@@ -1004,6 +1004,78 @@ body.high-contrast .tile-wrapper[data-label="W"] .tile { outline: 3px solid #555
 }
 
 /* ====================================================================
+   Tile drag layer (mouse only)
+   --------------------------------------------------------------------
+   When a colour is selected with the mouse, copies of the picked tiles
+   float and trail behind the cursor to give a sense of "carrying" them.
+   The layer covers the viewport but never intercepts clicks
+   (pointer-events: none). Keyboard users never trigger this because it
+   is driven by mousemove; selection still works instantly for them.
+   ==================================================================== */
+
+#drag-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+    overflow: hidden;
+}
+
+.drag-tile {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+    will-change: left, top;
+}
+
+/* A player board being scored pulses with a gold accent so it is clear
+   whose board is currently resolving during the scoring animation. */
+.player-board.is-scoring {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 0px;
+    animation: scoring-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes scoring-pulse {
+    0%, 100% { outline-color: var(--color-gold); }
+    50% { outline-color: var(--color-gold-soft); }
+}
+
+/* ====================================================================
+   Keyboard accessibility: visible focus rings
+   --------------------------------------------------------------------
+   Every interactive element gets a clear blue focus ring when reached
+   via keyboard navigation. :focus-visible (not :focus) means the rings
+   appear during Tab navigation but not on mouse clicks, so the UI
+   stays clean for mouse users.
+   ==================================================================== */
+
+.tile-wrapper.is-clickable:focus-visible {
+    outline: 3px solid var(--color-azul);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.pattern-line.is-clickable:focus-visible,
+.floor-line.is-clickable:focus-visible {
+    outline: 3px solid var(--color-azul);
+    outline-offset: 2px;
+    border-radius: 4px;
+    background: rgba(31, 95, 180, 0.08);
+}
+
+/* Native buttons get a stronger ring than the browser default for
+   consistency with the custom focusable elements. */
+button:focus-visible,
+.count-option input:focus-visible + span,
+.player-name-row input[type="text"]:focus-visible {
+    outline: 3px solid var(--color-azul);
+    outline-offset: 2px;
+}
+
+/* ====================================================================
    Reduced motion preference
    ==================================================================== */
 

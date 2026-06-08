@@ -26,9 +26,9 @@
 
 import Azul from "./Azul.js";
 
-// =====================================================================
-// DOM helpers
-// =====================================================================
+/*
+ DOM helpers
+*/
 
 const $ = function (selector) {
     return document.querySelector(selector);
@@ -38,12 +38,30 @@ const $$ = function (selector) {
     return Array.from(document.querySelectorAll(selector));
 };
 
-// =====================================================================
-// Asset paths (theming)
-// =====================================================================
-//
-// All SVG filenames referenced by the JavaScript live here. To re-theme,
-// drop in replacement SVGs with these filenames OR edit the paths below.
+/*
+Make an element keyboard-accessible: focusable via Tab and activated
+by Enter or Space. Pair this with a click listener; the keydown handler
+added here triggers element.click(), so the same handler runs for both
+mouse and keyboard. The role="button" attribute tells screen readers
+the element is interactive even though it is a div, not a button.
+*/
+const make_keyboard_clickable = function (element) {
+    element.tabIndex = 0;
+    element.setAttribute("role", "button");
+    element.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            element.click();
+        }
+    });
+};
+
+
+/*
+Asset paths (theming)
+All SVG filenames referenced by the JavaScript live here. To re-theme,
+drop in replacement SVGs with these filenames OR edit the paths below.
+*/
 
 const ASSET_PATHS = Object.freeze({
     "tile_prefix": "./assets/tile-",
@@ -235,7 +253,7 @@ const render_status_message = function () {
         msg = active.name + ", pick a colour from a factory or the centre.";
     } else {
         msg = active.name + " selected " + app.selection.colour
-                + ". Now choose a pattern line or the floor.";
+        + ". Now choose a pattern line or the floor.";
     }
     $("#status-message").textContent = msg;
 };
@@ -263,6 +281,11 @@ const render_factories = function () {
                 && app.selection.colour === colour
             );
             tile.classList.add("is-clickable");
+            tile.setAttribute(
+                "aria-label",
+                "Pick " + colour + " from factory " + (factory_index + 1)
+            );
+            make_keyboard_clickable(tile);
             if (is_selected) {
                 tile.classList.add("is-selected");
             } else if (
@@ -300,6 +323,8 @@ const render_center = function () {
             && app.selection.colour === colour
         );
         tile.classList.add("is-clickable");
+        tile.setAttribute("aria-label", "Pick " + colour + " from centre");
+        make_keyboard_clickable(tile);
         if (is_selected) {
             tile.classList.add("is-selected");
         } else if (
@@ -335,6 +360,7 @@ const render_all_boards = function () {
         const is_active = (index === app.game.active_player);
         const board_el = document.createElement("div");
         board_el.className = "player-board";
+        board_el.dataset.playerIndex = String(index);
         if (is_active) {
             board_el.classList.add("is-active");
         }
@@ -398,6 +424,7 @@ const render_player_board_into = function (container, player, is_active) {
 const render_pattern_line = function (player, row_index, is_active) {
     const line_el = document.createElement("div");
     line_el.className = "pattern-line";
+    line_el.dataset.row = String(row_index);
 
     const line = player.pattern_lines[row_index];
     const capacity = row_index + 1;
@@ -425,6 +452,11 @@ const render_pattern_line = function (player, row_index, is_active) {
         );
         if (legal) {
             line_el.classList.add("is-clickable");
+            line_el.setAttribute(
+                "aria-label",
+                "Place tiles on pattern line " + (row_index + 1)
+            );
+            make_keyboard_clickable(line_el);
             line_el.addEventListener("click", function () {
                 handle_pattern_line_click(row_index);
             });
@@ -445,6 +477,8 @@ const render_wall_row = function (player, row_index) {
     pattern.forEach(function (pattern_colour, col_index) {
         const slot = document.createElement("div");
         slot.className = "wall-slot";
+        slot.dataset.row = String(row_index);
+        slot.dataset.col = String(col_index);
         if (placed[col_index] !== undefined) {
             slot.classList.add("is-filled");
             slot.appendChild(tile_image(placed[col_index]));
@@ -490,6 +524,8 @@ const render_floor_line = function (player, is_active) {
 
     if (is_active && app.selection !== undefined) {
         line_el.classList.add("is-clickable");
+        line_el.setAttribute("aria-label", "Send selected tiles to floor");
+        make_keyboard_clickable(line_el);
         line_el.addEventListener("click", function () {
             handle_pattern_line_click(Azul.FLOOR_INDEX);
         });
@@ -518,6 +554,7 @@ const handle_factory_tile_click = function (factory_index, colour) {
             "colour": colour
         };
     }
+    sync_drag_layer();
     render_game_screen();
 };
 
@@ -531,6 +568,7 @@ const handle_center_tile_click = function (colour) {
     } else {
         app.selection = {"source": "center", "colour": colour};
     }
+    sync_drag_layer();
     render_game_screen();
 };
 
@@ -560,22 +598,215 @@ const handle_pattern_line_click = function (pattern_line_index) {
     }
     app.game = next;
     delete app.selection;
+    sync_drag_layer();
     advance_after_move();
+};
+
+// =====================================================================
+// Scoring-phase animation
+// =====================================================================
+//
+// When the round ends, rather than jumping straight to the resolved
+// state, we animate the wall-tiling phase: each player is highlighted in
+// turn, completed pattern lines slide a tile across to the wall, and the
+// leftover and floor tiles fly to the discard box.
+//
+// IMPORTANT ARCHITECTURE NOTE: the scoring logic lives entirely in the
+// pure module (Azul.end_round). This animation never computes scores or
+// resolves the board itself. It is given the "before" state (round over)
+// and the "after" state (end_round's output) and simply animates the
+// visual difference between the two, deriving what moved by comparing
+// the two states. When the animation finishes, the real resolved state
+// is rendered. The module remains the single source of truth.
+
+const SCORE_STEP_DELAY = 650;    // ms between animation steps
+const SCORE_FLY_TIME = 550;      // ms for a tile to fly to its target
+
+// Returns the on-screen centre of an element, or undefined if missing.
+const element_center = function (selector) {
+    const el = $(selector);
+    if (el === null) {
+        return undefined;
+    }
+    const rect = el.getBoundingClientRect();
+    return {
+        "x": rect.left + rect.width / 2,
+        "y": rect.top + rect.height / 2
+    };
+};
+
+// Creates a floating tile in the drag layer at `from`, transitions it to
+// `to`, and removes it when done. Purely visual.
+const fly_tile = function (colour, from, to) {
+    if (from === undefined || to === undefined) {
+        return;
+    }
+    const el = document.createElement("img");
+    el.className = "drag-tile flying";
+    el.src = drag_tile_src(colour);
+    el.alt = "";
+    el.style.left = from.x + "px";
+    el.style.top = from.y + "px";
+    $("#drag-layer").appendChild(el);
+    // Force a reflow so the starting position is committed before we
+    // change it, otherwise the browser may skip the transition. Reading
+    // a layout property (offsetWidth) triggers the reflow.
+    apply_fly_target(el, to);
+};
+
+// Sets the transition and destination on a flying tile after a reflow.
+// Separated out so the reflow-triggering read is not a bare expression
+// statement (which the linter disallows).
+const apply_fly_target = function (el, to) {
+    const reflow = el.offsetWidth;
+    el.dataset.reflow = String(reflow);
+    el.style.transition = "left " + SCORE_FLY_TIME + "ms ease-in-out, "
+        + "top " + SCORE_FLY_TIME + "ms ease-in-out";
+    el.style.left = to.x + "px";
+    el.style.top = to.y + "px";
+    window.setTimeout(function () {
+        el.remove();
+    }, SCORE_FLY_TIME + 50);
+};
+
+// Returns a single animation step that resolves one completed pattern
+// line: slides a tile to the wall and sends the leftovers to the box.
+// Defined outside any loop so the linter is satisfied; the closure
+// captures its arguments cleanly.
+const make_wall_step = function (board_sel, row, col, colour, leftover) {
+    return function () {
+        const from = element_center(
+            board_sel + " .pattern-line[data-row=\"" + row + "\"]"
+        );
+        const to = element_center(
+            board_sel + " .wall-slot[data-row=\"" + row
+            + "\"][data-col=\"" + col + "\"]"
+        );
+        fly_tile(colour, from, to);
+        const box = element_center("#box-icon");
+        let k = 0;
+        while (k < leftover) {
+            fly_tile(colour, from, box);
+            k += 1;
+        }
+    };
+};
+
+// Returns the highlight step for a player.
+const make_highlight_step = function (board_sel) {
+    return function () {
+        $$(".player-board").forEach(function (b) {
+            b.classList.remove("is-scoring");
+        });
+        const board = $(board_sel);
+        if (board !== null) {
+            board.classList.add("is-scoring");
+        }
+    };
+};
+
+// Returns the floor-clearing step for a player.
+const make_floor_step = function (board_sel, floor_colours) {
+    return function () {
+        const from = element_center(board_sel + " .floor-line");
+        const box = element_center("#box-icon");
+        floor_colours.forEach(function (colour) {
+            fly_tile(colour, from, box);
+        });
+    };
+};
+
+// Builds the ordered list of animation steps for one player by comparing
+// their before-state and after-state. Each step is a function with no
+// arguments that performs one visual action.
+const build_player_steps = function (before, after, player_index) {
+    const board_sel = ".player-board[data-player-index=\""+ player_index + "\"]";
+    const steps = [make_highlight_step(board_sel)];
+
+    // For each pattern line that was complete and is now empty, add a
+    // step to slide a tile to the wall and send leftovers to the box.
+    // Map over the wall rows (not a raw loop with inline closures).
+    Azul.WALL_PATTERN.forEach(function (pattern_row, row) {
+        const before_line = before.players[player_index].pattern_lines[row];
+        const after_line = after.players[player_index].pattern_lines[row];
+        const was_complete = (
+            before_line.length === row + 1
+            && after_line.length === 0
+        );
+        if (was_complete) {
+            const colour = before_line[0];
+            const col = pattern_row.indexOf(colour);
+            steps.push(make_wall_step(board_sel, row, col, colour, row));
+        }
+    });
+
+    // Floor tiles fly to the box (excluding the first-player token, which
+    // is not a real tile).
+    const floor = before.players[player_index].floor_line.filter(
+        (t) => t !== "first"
+    );
+    if (floor.length > 0) {
+        steps.push(make_floor_step(board_sel, floor));
+    }
+
+    return steps;
+};
+
+// Runs an array of step functions in sequence, pausing SCORE_STEP_DELAY
+// between each. Calls on_complete after the last step.
+const run_steps = function (steps, index, on_complete) {
+    if (index >= steps.length) {
+        window.setTimeout(on_complete, SCORE_STEP_DELAY);
+        return;
+    }
+    steps[index]();
+    window.setTimeout(function () {
+        run_steps(steps, index + 1, on_complete);
+    }, SCORE_STEP_DELAY);
+};
+
+// Orchestrates the whole scoring animation, then calls on_complete.
+const animate_scoring = function (before_game, after_game, on_complete) {
+    // Show the before-state so starting positions (full pattern lines,
+    // floor tiles) exist in the DOM for the animation to read.
+    app.game = before_game;
+    render_game_screen();
+    $("#status-message").textContent = "Scoring the round\u2026";
+
+    // Build all steps across all players, in seat order.
+    let all_steps = [];
+    before_game.players.forEach(function (ignore, player_index) {
+        all_steps = all_steps.concat(
+            build_player_steps(before_game, after_game, player_index)
+        );
+    });
+
+    run_steps(all_steps, 0, function () {
+        // Clear the scoring highlight and reveal the resolved state.
+        $$(".player-board").forEach(function (b) {
+            b.classList.remove("is-scoring");
+        });
+        app.game = after_game;
+        render_game_screen();
+        on_complete();
+    });
 };
 
 const advance_after_move = function () {
     // After every placement, check whether the round or game has ended.
-    // end_round() is called immediately so the UI always shows the
-    // resolved state rather than a transient ROUND_OVER phase.
+    // When the round ends we animate the scoring phase between the
+    // round-over state and the resolved state (both produced by the pure
+    // module); the resolved state is shown when the animation completes.
     if (app.game.phase === Azul.PHASE.ROUND_OVER) {
-        app.game = Azul.end_round(app.game);
-        if (app.game.phase === Azul.PHASE.GAME_OVER) {
-            render_game_screen();
-            show_game_over();
-            return;
-        }
-        render_game_screen();
-        show_round_summary();
+        const before_game = app.game;
+        const after_game = Azul.end_round(app.game);
+        animate_scoring(before_game, after_game, function () {
+            if (after_game.phase === Azul.PHASE.GAME_OVER) {
+                show_game_over();
+            } else {
+                show_round_summary();
+            }
+        });
         return;
     }
     render_game_screen();
@@ -677,6 +908,8 @@ const show_game_over = function () {
 };
 
 const handle_new_game = function () {
+    delete app.selection;
+    sync_drag_layer();
     hide_all_overlays();
     show_screen("#setup-screen");
     render_player_name_inputs();
@@ -716,8 +949,141 @@ const handle_contrast_toggle = function () {
 };
 
 // =====================================================================
-// Wiring
+// Tile drag layer (mouse-only cursor-follow animation)
 // =====================================================================
+//
+// While a colour is selected with the mouse, copies of the picked tiles
+// float just behind the cursor with a slight lag, as if being carried.
+// This is purely decorative: it reads app.selection but never changes
+// game state, and it is disabled for keyboard users (it only starts in
+// response to a real mousemove). The actual selection logic is unchanged.
+//
+// "Weight" is produced by easing each tile toward the cursor by a
+// fraction of the remaining distance every animation frame, so the
+// cluster trails rather than snapping to the pointer. Each tile in the
+// cluster eases at a slightly different rate so they fan out a little.
+
+const DRAG_EASE = 0.18;          // fraction of the gap closed per frame
+const DRAG_TILE_SPREAD = 6;      // px offset between stacked tiles
+
+const drag = Object.create(null);
+drag.cursor_x = 0;
+drag.cursor_y = 0;
+drag.tiles = [];                 // [{el, x, y, ease, offset_x, offset_y}]
+drag.active = false;
+// drag.frame holds the requestAnimationFrame id while animating; it is
+// left unset (undefined) when no animation is running.
+
+// Counts how many tiles of the selected colour are in the selection's
+// source, so we know how many floating copies to create.
+const count_selected_tiles = function () {
+    if (app.selection === undefined) {
+        return 0;
+    }
+    const colour = app.selection.colour;
+    const source = (
+        app.selection.source === "factory"
+        ? app.game.factories[app.selection.index]
+        : app.game.center
+    );
+    return source.filter((t) => t === colour).length;
+};
+
+const drag_tile_src = function (colour) {
+    return (
+        colour === "first"
+        ? ASSET_PATHS.first_player_token
+        : ASSET_PATHS.tile_prefix + colour + ASSET_PATHS.tile_suffix
+    );
+};
+
+const animate_drag = function () {
+    drag.tiles.forEach(function (tile) {
+        const target_x = drag.cursor_x + tile.offset_x;
+        const target_y = drag.cursor_y + tile.offset_y;
+        tile.x += (target_x - tile.x) * tile.ease;
+        tile.y += (target_y - tile.y) * tile.ease;
+        tile.el.style.left = tile.x + "px";
+        tile.el.style.top = tile.y + "px";
+    });
+    if (drag.active) {
+        drag.frame = window.requestAnimationFrame(animate_drag);
+    }
+};
+
+const stop_drag = function () {
+    drag.active = false;
+    if (drag.frame !== undefined) {
+        window.cancelAnimationFrame(drag.frame);
+        delete drag.frame;
+    }
+    $("#drag-layer").innerHTML = "";
+    drag.tiles = [];
+};
+
+const start_drag = function () {
+    stop_drag();
+    const colour = app.selection.colour;
+    const count = count_selected_tiles();
+    const layer = $("#drag-layer");
+    let i = 0;
+    while (i < count) {
+        const el = document.createElement("img");
+        el.className = "drag-tile";
+        el.src = drag_tile_src(colour);
+        el.alt = "";
+        el.style.left = drag.cursor_x + "px";
+        el.style.top = drag.cursor_y + "px";
+        layer.appendChild(el);
+        drag.tiles.push({
+            "el": el,
+            "x": drag.cursor_x,
+            "y": drag.cursor_y,
+            // Tiles further back in the stack ease a touch slower, so the
+            // cluster fans out behind the cursor as it moves.
+            "ease": DRAG_EASE - (i * 0.02),
+            "offset_x": i * DRAG_TILE_SPREAD,
+            "offset_y": i * DRAG_TILE_SPREAD
+        });
+        i += 1;
+    }
+    drag.active = true;
+    drag.frame = window.requestAnimationFrame(animate_drag);
+};
+
+// Single entry point: called after any change to app.selection. Starts
+// the trail if a selection exists and the cursor has been seen (mouse
+// user), otherwise stops it.
+const sync_drag_layer = function () {
+    if (app.selection !== undefined && drag.cursor_x !== 0) {
+        start_drag();
+    } else {
+        stop_drag();
+    }
+};
+
+const handle_mouse_move = function (event) {
+    drag.cursor_x = event.clientX;
+    drag.cursor_y = event.clientY;
+};
+
+
+// Global keyboard shortcuts
+
+
+/* Escape key deselects any currently-picked tile. This matches the
+behaviour of clicking the already-selected tile to deselect it, and
+is a common accessibility pattern for cancelling a selection, so it
+should feel instinctual to anyone who has used a computer*/
+
+const handle_global_keydown = function (event) {
+    if (event.key === "Escape" && app.selection !== undefined) {
+        delete app.selection;
+        sync_drag_layer();
+        render_game_screen();
+    }
+};
+
 
 const init = function () {
     render_player_name_inputs();
@@ -733,6 +1099,8 @@ const init = function () {
     $("#bonus-button").addEventListener("click", handle_show_bonus);
     $("#bonus-close-button").addEventListener("click", handle_close_bonus);
     $("#contrast-button").addEventListener("click", handle_contrast_toggle);
+    document.addEventListener("keydown", handle_global_keydown);
+    document.addEventListener("mousemove", handle_mouse_move);
 };
 
 // Module scripts are deferred, so the DOM is already parsed when this

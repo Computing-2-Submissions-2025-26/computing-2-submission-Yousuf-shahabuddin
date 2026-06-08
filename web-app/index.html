@@ -122,6 +122,15 @@
                     Highest score wins. Ties broken by more completed
                     rows.
                 </p>
+                
+                <h3>Controls</h3>
+                <p>
+                    Typically played with a mouse.If playing with keyboard only,
+                     use Tab to navigate between interactive elements and Enter 
+                     or Space to activate them. The game is fully playable with 
+                     keyboard alone, and all actions have accessible labels and 
+                     instructions.
+                </p>
             </details>
         </div>
     </section>
@@ -147,7 +156,7 @@
                     <span id="bag-count">0</span>
                 </span>
                 <span class="supply-mini" title="Discard box">
-                    <img src="./assets/box.svg" alt="" class="supply-mini-icon">
+                    <img id="box-icon" src="./assets/box.svg" alt="" class="supply-mini-icon">
                     <span id="box-count">0</span>
                 </span>
                 <button id="contrast-button" class="text-button" type="button" title="Toggle high contrast mode for colour-blindness">
@@ -236,6 +245,10 @@
     </section>
 
 </main>
+
+<!-- Floating tiles that trail the cursor while a colour is selected.
+     Populated and cleared entirely by main.js; never intercepts clicks. -->
+<div id="drag-layer" aria-hidden="true"></div>
 
 </body>
 </html>
