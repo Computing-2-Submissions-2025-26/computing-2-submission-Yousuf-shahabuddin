@@ -1,22 +1,21 @@
-/**
- * Tests for Azul.js.
- *
- * Each describe block focuses on one aspect of the game. Each test
- * is a single sentence describing what the rule is and a single
- * assertion checking that the code follows it. Reading this file
- * top-to-bottom should explain how the game works.
- *
- * The tests are intentionally not exhaustive. They cover the rules
- * of the game and the boundary conditions that a typical end-to-end
- * play might not exercise.
+/*
+  Tests for Azul.js.
+
+  Each describe block focuses on one aspect of the game. Each test
+  is a single sentence describing what the rule is and a single
+  assertion checking that the code follows it. Reading this file
+  top-to-bottom should explain how the game works.
+
+  The tests are intentionally not exhaustive. They cover the rules
+  of the game and the boundary conditions that a typical end-to-end
+  play might not exercise.
  */
 
 import {strict as assert} from "node:assert";
 import Azul from "../Azul.js";
 
-// ---------------------------------------------------------------------
-// Helper: build a deterministic game state by hand for tests.
-// ---------------------------------------------------------------------
+/* Helper: build a deterministic game state by hand for tests.*/
+
 
 const make_player = function (overrides) {
     return Object.assign({
@@ -49,9 +48,7 @@ const make_game = function (overrides) {
     }, overrides);
 };
 
-// ---------------------------------------------------------------------
-// Constants - sanity checks on the static values.
-// ---------------------------------------------------------------------
+/* Checks the static values.*/
 
 describe("Constants", function () {
     it("there are five tile colours", function () {
@@ -90,9 +87,7 @@ describe("Constants", function () {
     });
 });
 
-// ---------------------------------------------------------------------
-// Starting a game - validation and initial layout.
-// ---------------------------------------------------------------------
+/* Starting a game - validation and initial layout. */
 
 describe("Starting a game", function () {
     it("rejects fewer than 2 players by returning undefined", function () {
@@ -145,9 +140,9 @@ describe("Starting a game", function () {
     });
 });
 
-// ---------------------------------------------------------------------
-// Placement legality - when can you place tiles where?
-// ---------------------------------------------------------------------
+
+// Placement legality - when can you place tiles and where?
+
 
 describe("Placement legality", function () {
     it("you can always send tiles to the floor line", function () {
@@ -196,9 +191,9 @@ describe("Placement legality", function () {
     });
 });
 
-// ---------------------------------------------------------------------
+
 // Picking from a factory - the main action of a turn.
-// ---------------------------------------------------------------------
+
 
 describe("Picking from a factory", function () {
     it("moves the chosen colour onto the player's pattern line",
@@ -275,9 +270,9 @@ describe("Picking from a factory", function () {
     });
 });
 
-// ---------------------------------------------------------------------
-// Picking from the centre - including the first-player token.
-// ---------------------------------------------------------------------
+
+// Picking tiles from the centre - including the first-player token.
+
 
 describe("Picking from the centre", function () {
     it("moves the chosen colour from centre to the pattern line",
@@ -331,9 +326,9 @@ describe("Picking from the centre", function () {
     });
 });
 
-// ---------------------------------------------------------------------
+
 // Detecting round end - all factories and centre empty.
-// ---------------------------------------------------------------------
+
 
 describe("Round end detection", function () {
     it("the phase becomes ROUND_OVER after the last pick of a round",
@@ -355,9 +350,9 @@ describe("Round end detection", function () {
     });
 });
 
-// ---------------------------------------------------------------------
+
 // Tile placement scoring - the connected-tiles rule.
-// ---------------------------------------------------------------------
+
 
 describe("Tile placement scoring", function () {
     const empty_wall = function () {
@@ -390,12 +385,11 @@ describe("Tile placement scoring", function () {
     });
     it("a tile with horizontal AND vertical neighbours scores both runs",
         function () {
-            // Like rulebook Fig. 5: 4 horizontal + 3 vertical = 7.
             const wall = empty_wall();
             // Horizontal run of 4 including the new tile.
             wall[2][0] = "black";
             wall[2][1] = "white";
-            wall[2][2] = "blue";  // the new tile
+            wall[2][2] = "blue";
             wall[2][3] = "yellow";
             // Vertical run of 3 including the new tile.
             wall[1][2] = "yellow";
@@ -412,9 +406,7 @@ describe("Tile placement scoring", function () {
         });
 });
 
-// ---------------------------------------------------------------------
-// Floor penalty - how much the floor line costs you.
-// ---------------------------------------------------------------------
+// Floor penalty - how many points tiles in the floor line will cost you
 
 describe("Floor penalty", function () {
     it("an empty floor costs nothing", function () {
@@ -437,9 +429,8 @@ describe("Floor penalty", function () {
         });
 });
 
-// ---------------------------------------------------------------------
-// Bonus scoring - end-of-game extras for completed lines and colours.
-// ---------------------------------------------------------------------
+// Bonus scoring - end-game extras for completed lines and colours.
+
 
 describe("Bonus scoring", function () {
     it("an empty wall has zero bonus", function () {
@@ -497,9 +488,7 @@ describe("Bonus scoring", function () {
     });
 });
 
-// ---------------------------------------------------------------------
-// End of round - the heart of scoring.
-// ---------------------------------------------------------------------
+// End of round scoring
 
 describe("End of round", function () {
     it("moves a tile from a complete pattern line onto the wall",
