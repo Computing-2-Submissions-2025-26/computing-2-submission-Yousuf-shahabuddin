@@ -27,9 +27,7 @@ import R from "./ramda.js";
  */
 const Azul = Object.create(null);
 
-// =====================================================================
 // Type definitions
-// =====================================================================
 
 /**
  * A tile colour. Tiles come in five colours plus the special
@@ -102,9 +100,7 @@ const Azul = Object.create(null);
  * @memberof Azul
  */
 
-// =====================================================================
 // Constants
-// =====================================================================
 
 /**
  * The phases of the game.
@@ -230,9 +226,7 @@ Azul.BONUS_VALUES = Object.freeze({
  */
 Azul.FLOOR_INDEX = 5;
 
-// =====================================================================
 // Private helpers (functions used inside the module but not exported)
-// =====================================================================
 
 /**
  * Returns a new array with the items of the input in random order.
@@ -351,9 +345,7 @@ const wall_column_for = function (row, colour) {
     return Azul.WALL_PATTERN[row].indexOf(colour);
 };
 
-// =====================================================================
 // Public placement and legality
-// =====================================================================
 
 /**
  * Tests whether placing the given colour in the given pattern line of
@@ -449,9 +441,8 @@ const add_to_floor = function (player, tiles) {
     };
 };
 
-// =====================================================================
+
 // Game lifecycle
-// =====================================================================
 
 /**
  * Returns a new game state. The number of factories scales with

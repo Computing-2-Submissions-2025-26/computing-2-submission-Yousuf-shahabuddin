@@ -651,8 +651,8 @@ const fly_tile = function (colour, from, to) {
 const apply_fly_target = function (el, to) {
     const reflow = el.offsetWidth;
     el.dataset.reflow = String(reflow);
-    el.style.transition = "left " + SCORE_FLY_TIME + "ms ease-in-out, "
-        + "top " + SCORE_FLY_TIME + "ms ease-in-out";
+    el.style.transition = "left " + SCORE_FLY_TIME + "ms ease-in-out, " +
+        " top " + SCORE_FLY_TIME + "ms ease-in-out";
     el.style.left = to.x + "px";
     el.style.top = to.y + "px";
     window.setTimeout(function () {
@@ -711,12 +711,13 @@ const make_floor_step = function (board_sel, floor_colours) {
  their before-state and after-state. Each step is a function with no
  arguments that performs one visual action.*/
 const build_player_steps = function (before, after, player_index) {
-    const board_sel = ".player-board[data-player-index=\""+ player_index + "\"]";
+    const board_sel = ".player-board[data-player-index=\"" + 
+        player_index + "\"]";
     const steps = [make_highlight_step(board_sel)];
 
-    /*For each pattern line that was complete and is now empty, add a
+    /* For each pattern line that was complete and is now empty, add a
     step to slide a tile to the wall and send leftovers to the box.
-    Map over the wall rows (not a raw loop with inline closures).*/
+    Map over the wall rows (not a raw loop with inline closures). */
     Azul.WALL_PATTERN.forEach(function (pattern_row, row) {
         const before_line = before.players[player_index].pattern_lines[row];
         const after_line = after.players[player_index].pattern_lines[row];
@@ -731,8 +732,8 @@ const build_player_steps = function (before, after, player_index) {
         }
     });
 
-    /* Floor tiles fly to the box (excluding the first-player token, which
-     is not a real tile).*/
+    /* Floor tiles fly to the box (excluding the first-player token,
+    which is not a real tile). */
     const floor = before.players[player_index].floor_line.filter(
         (t) => t !== "first"
     );
@@ -1034,9 +1035,9 @@ const start_drag = function () {
     drag.frame = window.requestAnimationFrame(animate_drag);
 };
 
-// Single entry point: called after any change to app.selection. Starts
-// the trail if a selection exists and the cursor has been seen (mouse
-// user), otherwise stops it.
+/* Single entry point: called after any change to app.selection. Starts
+the trail if a selection exists and the cursor has been seen (mouse
+user), otherwise stops it.*/
 const sync_drag_layer = function () {
     if (app.selection !== undefined && drag.cursor_x !== 0) {
         start_drag();
