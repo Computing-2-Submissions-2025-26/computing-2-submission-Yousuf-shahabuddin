@@ -477,7 +477,7 @@ describe("Bonus scoring", function () {
             [undefined, undefined, undefined, undefined, undefined]
         ];
         Azul.COLOURS.forEach(function () {});
-        // Blue is at column 0 in row 0, column 1 in row 1, etc.
+        // Blue is at column 0 in row 0, column 1 in row 1 and so on
         Azul.WALL_PATTERN.forEach(function (row, r) {
             const col = row.indexOf("blue");
             wall[r][col] = "blue";
@@ -540,7 +540,7 @@ describe("End of round", function () {
             ]
         });
         const after = Azul.end_round(game);
-        // Penalty is -2 but the score can't go below 0.
+        // Penalty is -2 but the score can't go below 0 according to the rules
         assert.equal(after.players[0].score, 0);
         assert.deepEqual(after.players[0].floor_line, []);
     });
@@ -564,14 +564,12 @@ describe("End of round", function () {
     });
 });
 
-// ---------------------------------------------------------------------
 // End of game - completed row triggers final scoring.
-// ---------------------------------------------------------------------
 
 describe("End of game", function () {
     it("ends when a player completes a horizontal row of 5", function () {
-        // Set up a player with a wall that becomes complete after the
-        // round's pattern lines are resolved.
+        /* Set up a player with a wall that becomes complete after the
+        round's pattern lines are resolved.*/
         const wall_4_of_5 = [
             ["blue", "yellow", "red", "black", undefined],
             [undefined, undefined, undefined, undefined, undefined],
@@ -593,10 +591,10 @@ describe("End of game", function () {
         const after = Azul.end_round(game);
         assert.equal(after.phase, Azul.PHASE.GAME_OVER);
     });
+    /*Player completes row 0 of all 5 colours. The complete row earns
+    2 bonus points; we check the score increased by 2 over what the
+    last placement would otherwise give.*/
     it("adds bonus points when the game ends", function () {
-        // Player completes row 0 of all 5 colours. The complete row earns
-        // 2 bonus points; we check the score increased by 2 over what the
-        // last placement would otherwise give.
         const wall_4_of_5 = [
             ["blue", "yellow", "red", "black", undefined],
             [undefined, undefined, undefined, undefined, undefined],
@@ -615,8 +613,8 @@ describe("End of game", function () {
             ]
         });
         const after = Azul.end_round(game);
-        // Placing white at (0,4) makes a horizontal run of 5 - scores 5.
-        // Plus 2 bonus for the completed row.
+        /* Placing white at (0,4) makes a horizontal run of 5 - scores 5.
+           Plus 2 bonus for the completed row.*/
         assert.equal(after.players[0].score, 7);
     });
     it("winners returns undefined while the game is still going",
@@ -638,10 +636,7 @@ describe("End of game", function () {
         });
 });
 
-// ---------------------------------------------------------------------
-// Has-completed-row check - exposed for UI use.
-// ---------------------------------------------------------------------
-
+// Check to see if the row has been complete
 describe("Has completed row", function () {
     it("is false when no row is complete", function () {
         const player = make_player();
@@ -661,9 +656,9 @@ describe("Has completed row", function () {
     });
 });
 
-// ---------------------------------------------------------------------
-// Tile conservation - tiles must not appear or disappear from the system.
-// ---------------------------------------------------------------------
+/* Tile conservation - tiles must not appear or disappear from the system.
+   They are cycled through, going into the discard box after use, and then
+   they replenish the draw bag when it is completely empty.*/
 
 describe("Tile conservation", function () {
     const count_tiles = function (game) {
@@ -678,8 +673,8 @@ describe("Tile conservation", function () {
             total += p.wall.flat().filter(function (c) {
                 return c !== undefined;
             }).length;
-            // Exclude the first-player token because it isn't a tile;
-            // it's tracked separately via has_first_token.
+            // Exclude the first-player token because it isn't a tile.
+            // It is tracked separately with has_first_token.
             total += p.floor_line.filter(function (t) {
                 return t !== "first";
             }).length;

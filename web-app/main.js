@@ -69,23 +69,20 @@ const ASSET_PATHS = Object.freeze({
     "first_player_token": "./assets/first-player-token.svg"
 });
 
-// =====================================================================
-// App state
-// =====================================================================
-//
-// `game` is the pure game state from Azul.js. It is absent until a game
-//   starts; reading an absent property returns undefined.
-// `selection` is what the active player has currently tapped:
-//   absent, or {source: "factory", index: N, colour: "blue"},
-//   or {source: "center", colour: "blue"}.
-// `score_snapshot` lets us show "+N this round" in the round summary.
+/*
+App state
+
+`game` is the pure game state from Azul.js. It is absent until a game
+  starts; reading an absent property returns undefined.
+`selection` is what the active player has currently tapped:
+  absent, or {source: "factory", index: N, colour: "blue"},
+  or {source: "center", colour: "blue"}.
+`score_snapshot` lets us show "+N this round" in the round summary.*/
 
 const app = Object.create(null);
 app.score_snapshot = [];
 
-// =====================================================================
 // Screen / overlay management
-// =====================================================================
 
 const all_screens = ["#setup-screen", "#game-screen"];
 const all_overlays = [
@@ -112,9 +109,7 @@ const show_overlay = function (overlay_id) {
     });
 };
 
-// =====================================================================
 // Setup screen
-// =====================================================================
 
 const default_name = function (index) {
     return "Player " + (index + 1);
@@ -345,9 +340,9 @@ const render_center = function () {
     );
 };
 
-// Render every player's board side by side. The active player gets a
-// visual accent so it is clear whose turn it is. Only the active
-// player's board responds to pattern-line and floor clicks.
+/*Render every player's board side by side. The active player gets a
+visual accent so it is clear whose turn it is. Only the active
+player's board responds to pattern-line and floor clicks.*/
 const render_all_boards = function () {
     const container = $("#boards-row");
     container.innerHTML = "";
@@ -386,7 +381,7 @@ const render_player_board_into = function (container, player, is_active) {
 
     container.appendChild(header);
 
-    // Pattern lines | divider | wall — laid out as a grid row.
+    // Pattern lines | divider | wall - laid out as a grid row.
     const grid = document.createElement("div");
     grid.className = "board-grid";
 
@@ -442,8 +437,8 @@ const render_pattern_line = function (player, row_index, is_active) {
         line_el.appendChild(tile_image(colour));
     });
 
-    // Only the active player's lines are clickable, and only when a
-    // colour has been selected from a factory or the centre.
+    /* Only the active player's lines are clickable, and only when a
+    colour has been selected from a factory or the centre.*/
     if (is_active && app.selection !== undefined) {
         const legal = Azul.is_legal_placement(
             player,
@@ -483,8 +478,8 @@ const render_wall_row = function (player, row_index) {
             slot.classList.add("is-filled");
             slot.appendChild(tile_image(placed[col_index]));
         } else {
-            // Faded "ghost" tile shows which colour belongs in each
-            // wall position, so players can plan ahead.
+            /* Faded "ghost" tile shows which colour belongs in each
+            wall position, so players can plan ahead.*/
             slot.appendChild(tile_image(pattern_colour));
         }
         row_el.appendChild(slot);
@@ -497,8 +492,8 @@ const render_floor_line = function (player, is_active) {
     const line_el = document.createElement("div");
     line_el.className = "floor-line";
 
-    // Always render all seven slots so the penalty numbers above each
-    // slot are always visible, even before any tiles have fallen.
+    /* Always render all seven slots so the penalty numbers above each
+    slot are always visible, even before any tiles have fallen.*/
     let i = 0;
     while (i < Azul.FLOOR_CAPACITY) {
         const slot = document.createElement("div");
@@ -534,9 +529,7 @@ const render_floor_line = function (player, is_active) {
     return line_el;
 };
 
-// =====================================================================
 // Click handlers
-// =====================================================================
 
 const handle_factory_tile_click = function (factory_index, colour) {
     // Clicking the already-selected colour deselects it.
@@ -602,22 +595,20 @@ const handle_pattern_line_click = function (pattern_line_index) {
     advance_after_move();
 };
 
-// =====================================================================
-// Scoring-phase animation
-// =====================================================================
-//
-// When the round ends, rather than jumping straight to the resolved
-// state, we animate the wall-tiling phase: each player is highlighted in
-// turn, completed pattern lines slide a tile across to the wall, and the
-// leftover and floor tiles fly to the discard box.
-//
-// IMPORTANT ARCHITECTURE NOTE: the scoring logic lives entirely in the
-// pure module (Azul.end_round). This animation never computes scores or
-// resolves the board itself. It is given the "before" state (round over)
-// and the "after" state (end_round's output) and simply animates the
-// visual difference between the two, deriving what moved by comparing
-// the two states. When the animation finishes, the real resolved state
-// is rendered. The module remains the single source of truth.
+/* Scoring-phase animation
+When the round ends, rather than jumping straight to the resolved
+state, we animate the wall-tiling phase: each player is highlighted in
+turn, completed pattern lines slide a tile across to the wall, and the
+leftover and floor tiles fly to the discard box.
+
+IMPORTANT ARCHITECTURE NOTE: the scoring logic lives entirely in the
+pure module (Azul.end_round). This animation never computes scores or
+resolves the board itself. It is given the "before" state (round over)
+and the "after" state (end_round's output) and simply animates the
+visual difference between the two, deriving what moved by comparing
+the two states. When the animation finishes, the real resolved state
+is rendered. The module remains the single source of truth.
+*/
 
 const SCORE_STEP_DELAY = 650;    // ms between animation steps
 const SCORE_FLY_TIME = 550;      // ms for a tile to fly to its target
@@ -636,7 +627,7 @@ const element_center = function (selector) {
 };
 
 // Creates a floating tile in the drag layer at `from`, transitions it to
-// `to`, and removes it when done. Purely visual.
+// `to`, and removes it when done for better visuals.
 const fly_tile = function (colour, from, to) {
     if (from === undefined || to === undefined) {
         return;
@@ -648,15 +639,15 @@ const fly_tile = function (colour, from, to) {
     el.style.left = from.x + "px";
     el.style.top = from.y + "px";
     $("#drag-layer").appendChild(el);
-    // Force a reflow so the starting position is committed before we
-    // change it, otherwise the browser may skip the transition. Reading
-    // a layout property (offsetWidth) triggers the reflow.
+    /* Force a reflow so the starting position is committed before we
+     change it, otherwise the browser may skip the transition. Reading
+     a layout property (offsetWidth) triggers the reflow.*/
     apply_fly_target(el, to);
 };
 
-// Sets the transition and destination on a flying tile after a reflow.
-// Separated out so the reflow-triggering read is not a bare expression
-// statement (which the linter disallows).
+/* Sets the transition and destination on a flying tile after a reflow.
+ Separated out so the reflow-triggering read is not a bare expression
+ statement (which the linter disallows).*/
 const apply_fly_target = function (el, to) {
     const reflow = el.offsetWidth;
     el.dataset.reflow = String(reflow);
@@ -669,10 +660,10 @@ const apply_fly_target = function (el, to) {
     }, SCORE_FLY_TIME + 50);
 };
 
-// Returns a single animation step that resolves one completed pattern
-// line: slides a tile to the wall and sends the leftovers to the box.
-// Defined outside any loop so the linter is satisfied; the closure
-// captures its arguments cleanly.
+/* Returns a single animation step that resolves one completed pattern
+ line: slides a tile to the wall and sends the leftovers to the box.
+ Defined outside any loop so the linter is satisfied; the closure
+ captures its arguments cleanly.*/
 const make_wall_step = function (board_sel, row, col, colour, leftover) {
     return function () {
         const from = element_center(
@@ -716,16 +707,16 @@ const make_floor_step = function (board_sel, floor_colours) {
     };
 };
 
-// Builds the ordered list of animation steps for one player by comparing
-// their before-state and after-state. Each step is a function with no
-// arguments that performs one visual action.
+/* Builds the ordered list of animation steps for one player by comparing
+ their before-state and after-state. Each step is a function with no
+ arguments that performs one visual action.*/
 const build_player_steps = function (before, after, player_index) {
     const board_sel = ".player-board[data-player-index=\""+ player_index + "\"]";
     const steps = [make_highlight_step(board_sel)];
 
-    // For each pattern line that was complete and is now empty, add a
-    // step to slide a tile to the wall and send leftovers to the box.
-    // Map over the wall rows (not a raw loop with inline closures).
+    /*For each pattern line that was complete and is now empty, add a
+    step to slide a tile to the wall and send leftovers to the box.
+    Map over the wall rows (not a raw loop with inline closures).*/
     Azul.WALL_PATTERN.forEach(function (pattern_row, row) {
         const before_line = before.players[player_index].pattern_lines[row];
         const after_line = after.players[player_index].pattern_lines[row];
@@ -740,8 +731,8 @@ const build_player_steps = function (before, after, player_index) {
         }
     });
 
-    // Floor tiles fly to the box (excluding the first-player token, which
-    // is not a real tile).
+    /* Floor tiles fly to the box (excluding the first-player token, which
+     is not a real tile).*/
     const floor = before.players[player_index].floor_line.filter(
         (t) => t !== "first"
     );
@@ -752,8 +743,8 @@ const build_player_steps = function (before, after, player_index) {
     return steps;
 };
 
-// Runs an array of step functions in sequence, pausing SCORE_STEP_DELAY
-// between each. Calls on_complete after the last step.
+/* Runs an array of step functions in sequence, pausing SCORE_STEP_DELAY
+ between each. Calls on_complete after the last step.*/
 const run_steps = function (steps, index, on_complete) {
     if (index >= steps.length) {
         window.setTimeout(on_complete, SCORE_STEP_DELAY);
@@ -793,10 +784,10 @@ const animate_scoring = function (before_game, after_game, on_complete) {
 };
 
 const advance_after_move = function () {
-    // After every placement, check whether the round or game has ended.
-    // When the round ends we animate the scoring phase between the
-    // round-over state and the resolved state (both produced by the pure
-    // module); the resolved state is shown when the animation completes.
+    /* After every placement, check whether the round or game has ended.
+     When the round ends we animate the scoring phase between the
+     round-over state and the resolved state (both produced by the pure
+     module); the resolved state is shown when the animation completes.*/
     if (app.game.phase === Azul.PHASE.ROUND_OVER) {
         const before_game = app.game;
         const after_game = Azul.end_round(app.game);
@@ -812,9 +803,7 @@ const advance_after_move = function () {
     render_game_screen();
 };
 
-// =====================================================================
 // Round summary
-// =====================================================================
 
 const render_scoreboard = function (
     container,
@@ -887,9 +876,7 @@ const handle_next_round = function () {
     render_game_screen();
 };
 
-// =====================================================================
 // Game over
-// =====================================================================
 
 const show_game_over = function () {
     const game = app.game;
@@ -921,9 +908,7 @@ const handle_quit = function () {
     }
 };
 
-// =====================================================================
-// Bonus overlay
-// =====================================================================
+// Bonuses overlay
 
 const handle_show_bonus = function () {
     show_overlay("#bonus-overlay");
@@ -933,35 +918,33 @@ const handle_close_bonus = function () {
     hide_all_overlays();
 };
 
-// =====================================================================
 // High-contrast mode (colour-blindness accessibility)
-// =====================================================================
-//
-// Toggled by the Contrast button in the top bar. Adds a class
-// "high-contrast" to <body>. The CSS then uses that class to overlay
-// a text label (B/Y/R/K/W) and a distinct border style on every tile
-// via the .tile-wrapper::after pseudo-element, so colour is no longer
-// the only distinguishing feature between tile types.
 
+/* Toggled by the Contrast button in the top bar. Adds a class
+ "high-contrast" to <body>. The CSS then uses that class to overlay
+ a text label (B/Y/R/K/W) and a distinct border style on every tile
+ via the .tile-wrapper::after pseudo-element, so that colour is no longer
+ the only distinguishing feature between tile types. Should be easier to
+ see, although the tiles do already have differentiating patterns.
+*/
 const handle_contrast_toggle = function () {
     document.body.classList.toggle("high-contrast");
     $("#contrast-button").classList.toggle("is-active");
 };
 
-// =====================================================================
-// Tile drag layer (mouse-only cursor-follow animation)
-// =====================================================================
-//
-// While a colour is selected with the mouse, copies of the picked tiles
-// float just behind the cursor with a slight lag, as if being carried.
-// This is purely decorative: it reads app.selection but never changes
-// game state, and it is disabled for keyboard users (it only starts in
-// response to a real mousemove). The actual selection logic is unchanged.
-//
-// "Weight" is produced by easing each tile toward the cursor by a
-// fraction of the remaining distance every animation frame, so the
-// cluster trails rather than snapping to the pointer. Each tile in the
-// cluster eases at a slightly different rate so they fan out a little.
+/* Tile drag layer (mouse-only cursor-follow animation)
+
+ While a colour is selected with the mouse, copies of the picked tiles
+ float just behind the cursor with a slight lag, as if being carried.
+ This is purely decorative: it reads app.selection but never changes
+ game state, and it is disabled for keyboard users (it only starts in
+ response to a real mousemove). The actual selection logic is unchanged.
+
+ "Weight" is produced by easing each tile toward the cursor by a
+ fraction of the remaining distance every animation frame, so the
+ cluster trails rather than snapping to the pointer. Each tile in the
+ cluster eases at a slightly different rate so they fan out a little.
+ */
 
 const DRAG_EASE = 0.18;          // fraction of the gap closed per frame
 const DRAG_TILE_SPREAD = 6;      // px offset between stacked tiles
@@ -1103,7 +1086,7 @@ const init = function () {
     document.addEventListener("mousemove", handle_mouse_move);
 };
 
-// Module scripts are deferred, so the DOM is already parsed when this
-// code runs. Call init directly rather than waiting for DOMContentLoaded,
-// which has already fired by the time a module script executes.
+/* Module scripts are deferred, so the DOM is already parsed when this
+ code runs. Call init directly rather than waiting for DOMContentLoaded,
+ which has already fired by the time a module script executes.*/
 init();
