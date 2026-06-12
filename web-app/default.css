@@ -54,9 +54,9 @@
     --gap: clamp(2px, 0.3vw, 5px);
 }
 
-/* ====================================================================
-   Reset and base
-   ==================================================================== */
+/* Reset and base */
+
+
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -110,8 +110,7 @@ legend {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-gold);
-    margin-bottom: 0.5rem;
-}
+    margin-bottom: 0.5rem;}
 
 .visually-hidden {
     position: absolute;
@@ -128,9 +127,7 @@ img {
     -webkit-user-drag: none;
 }
 
-/* ====================================================================
-   Top-level layout
-   ====================================================================
+/* Top-level layout 
    #app fills the viewport. Only one screen is visible at a time. The
    game screen is itself a grid; overlays float on top. */
 
@@ -145,10 +142,7 @@ img {
     display: none !important;
 }
 
-/* ====================================================================
-   Setup screen (overlay)
-   ==================================================================== */
-
+/* Setup screen (overlay)*/
 .overlay {
     position: fixed;
     inset: 0;
@@ -158,8 +152,7 @@ img {
     justify-content: center;
     padding: 2rem;
     z-index: 100;
-    overflow-y: auto;
-}
+    overflow-y: auto;}
 
 .setup-card {
     background: var(--color-paper);
@@ -170,8 +163,7 @@ img {
     width: 100%;
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-}
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);}
 
 .setup-title {
     font-family: var(--font-display);
@@ -180,25 +172,21 @@ img {
     letter-spacing: 0.2em;
     color: var(--color-azul);
     text-align: center;
-    line-height: 1;
-}
+    line-height: 1;}
 
 .setup-tagline {
     font-family: var(--font-display);
     font-style: italic;
     color: var(--color-gold);
     text-align: center;
-    margin-bottom: 1.5rem;
-}
+    margin-bottom: 1.5rem;}
 
 .setup-field {
-    margin-bottom: 1.25rem;
-}
+    margin-bottom: 1.25rem;}
 
 .count-options {
     display: flex;
-    gap: 0.5rem;
-}
+    gap: 0.5rem;}
 
 .count-option {
     flex: 1;
@@ -209,8 +197,7 @@ img {
 .count-option input {
     position: absolute;
     opacity: 0;
-    pointer-events: none;
-}
+    pointer-events: none;}
 
 .count-option span {
     display: block;
@@ -222,8 +209,7 @@ img {
     border: 1px solid var(--color-gold-soft);
     border-radius: 4px;
     background: white;
-    transition: all 0.15s ease;
-}
+    transition: all 0.15s ease;}
 
 .count-option:hover span {
     border-color: var(--color-azul);
@@ -242,8 +228,7 @@ img {
 
 .player-names {
     display: grid;
-    gap: 0.4rem;
-}
+    gap: 0.4rem;}
 
 .player-name-row {
     display: grid;
@@ -262,8 +247,7 @@ img {
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--color-gold-soft);
     border-radius: 4px;
-    background: white;
-}
+    background: white;}
 
 /* Rules panel inside setup card */
 .rules-panel {
@@ -307,9 +291,9 @@ img {
     margin-bottom: 0.25rem;
 }
 
-/* ====================================================================
-   Buttons
-   ==================================================================== */
+
+
+/* Buttons */
 
 .primary-button {
     background: var(--color-azul);
@@ -318,8 +302,7 @@ img {
     border-radius: 4px;
     font-weight: 500;
     font-size: 0.95rem;
-    transition: background 0.15s ease, transform 0.1s ease;
-}
+    transition: background 0.15s ease, transform 0.1s ease;}
 
 .primary-button:hover:not(:disabled) {
     background: var(--color-azul-dark);
@@ -349,9 +332,7 @@ img {
     text-decoration-color: var(--color-azul);
 }
 
-/* ====================================================================
-   Game screen layout (the no-scroll grid)
-   ==================================================================== */
+/* Game screen layout (the no-scroll grid) */
 
 #game-screen {
     height: 100vh;
@@ -359,8 +340,7 @@ img {
     display: grid;
     grid-template-rows: auto auto 1fr;
     padding: 0.5rem 1rem;
-    gap: 0.5rem;
-}
+    gap: 0.5rem;}
 
 /* The boards row uses auto-sized content with its own internal padding,
    so the boards size to fit their content; the 1fr cell in the grid
@@ -372,7 +352,7 @@ img {
     min-height: 0;
 }
 
-/* --- Top bar --- */
+/* Top bar */
 
 .top-bar {
     display: grid;
@@ -436,9 +416,7 @@ img {
     height: 22px;
 }
 
-/* ====================================================================
-   Play area (factories + centre)
-   ==================================================================== */
+/* Play area (factories + centre) */
 
 .play-area {
     display: grid;
@@ -449,8 +427,7 @@ img {
     border: 1px solid var(--color-gold-soft);
     border-radius: 6px;
     align-items: center;
-    min-height: 0;
-}
+    min-height: 0;}
 
 .zone-heading {
     font-family: var(--font-display);
@@ -487,8 +464,7 @@ img {
     background-position: center;
     display: flex;
     align-items: center;
-    justify-content: center;
-}
+    justify-content: center;}
 
 .factory-tiles {
     display: grid;
@@ -496,30 +472,26 @@ img {
     gap: 3px;
     width: calc(var(--fac-size) * 0.62);
     height: calc(var(--fac-size) * 0.62);
-    place-items: center;
-}
+    place-items: center;}
+
 
 .factory-tiles .tile-wrapper {
     width: 100%;
     height: 100%;
     max-width: var(--tile-size);
-    max-height: var(--tile-size);
-}
+    max-height: var(--tile-size);}
 
 .factory-tiles .tile-wrapper .tile {
     width: 100%;
-    height: 100%;
-}
+    height: 100%;}
 
 .factory.is-empty {
-    opacity: 0.3;
-}
+    opacity: 0.3;}
 
 /* Centre column */
 .center-zone {
     min-width: 12rem;
-    max-width: 22rem;
-}
+    max-width: 22rem;}
 
 .center {
     background: var(--color-paper-dim);
@@ -530,8 +502,7 @@ img {
     display: flex;
     flex-wrap: wrap;
     gap: 3px;
-    align-content: flex-start;
-}
+    align-content: flex-start;}
 
 .center.is-empty::before {
     content: "Empty";
@@ -540,15 +511,12 @@ img {
     width: 100%;
     text-align: center;
     font-size: 0.85rem;
-    padding: 0.2rem 0;
-}
+    padding: 0.2rem 0;}
 
-/* ====================================================================
-   Player boards row
-   ====================================================================
-   All players are displayed side-by-side. Uses fr-fr-fr-fr so they
+/* Player boards row.
+   All players are displayed side-by-side. They
    share the remaining vertical space equally. The active player is
-   accented but not enlarged. */
+   sort of highlighted but not enlarged. */
 
 .boards-row {
     display: grid;
@@ -585,13 +553,11 @@ img {
     min-height: 0;
     --tile-size: var(--tile-size-board);
     --slot-size: var(--tile-size-board);
-    transition: box-shadow 0.2s ease;
-}
+    transition: box-shadow 0.2s ease;}
 
 .player-board.is-active {
     outline: 3px solid var(--color-azul);
-    outline-offset: 0px;
-}
+    outline-offset: 0px;}
 
 .player-board-header {
     display: flex;
@@ -600,8 +566,7 @@ img {
     margin-bottom: 0.4rem;
     padding-bottom: 0.3rem;
     border-bottom: 1px solid var(--color-gold-soft);
-    min-width: 0;
-}
+    min-width: 0;}
 
 .player-board-name {
     font-family: var(--font-display);
@@ -611,21 +576,18 @@ img {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    min-width: 0;
-}
+    min-width: 0;}
 
 .player-board-score {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.25rem;
     color: var(--color-azul);
-    flex-shrink: 0;
-}
+    flex-shrink: 0;}
 
 .player-board.is-active .player-board-name::before {
     content: "▸ ";
-    color: var(--color-azul);
-}
+    color: var(--color-azul);}
 
 /* Board interior: pattern lines | divider | wall */
 .board-grid {
@@ -633,76 +595,63 @@ img {
     grid-template-columns: auto auto auto;
     gap: 0.3rem;
     justify-content: center;
-    align-items: start;
-}
+    align-items: start;}
 
 .pattern-lines {
     display: flex;
     flex-direction: column;
     gap: var(--gap);
-    align-items: flex-end;
-}
+    align-items: flex-end;}
 
 .pattern-line {
     display: flex;
     gap: var(--gap);
     padding: 2px;
-    border-radius: 3px;
-}
+    border-radius: 3px;}
 
 .pattern-line.is-clickable {
-    cursor: pointer;
-}
+    cursor: pointer;}
 
 .pattern-line.is-clickable:hover {
-    background: rgba(31, 95, 180, 0.12);
-}
+    background: rgba(31, 95, 180, 0.12);}
 
 .pattern-line.is-illegal {
-    opacity: 0.45;
-}
+    opacity: 0.45;}
 
 .board-divider {
     width: 1.5px;
     background: var(--color-gold);
     align-self: stretch;
-    margin: 0 0.2rem;
-}
+    margin: 0 0.2rem;}
 
 .wall {
     display: flex;
     flex-direction: column;
-    gap: var(--gap);
-}
+    gap: var(--gap);}
 
 .wall-row {
     display: flex;
     gap: var(--gap);
-    padding: 2px;  /* match .pattern-line padding so row heights align */
-}
+    padding: 2px;  /* match .pattern-line padding so row heights align */}
 
 /* Floor line: full width below the pattern lines + wall */
 .floor-line-zone {
     margin-top: 0.4rem;
     padding-top: 1.2rem;
-    border-top: 1px solid var(--color-gold-soft);
-}
+    border-top: 1px solid var(--color-gold-soft);}
 
 .floor-line {
     display: flex;
     gap: var(--gap);
     padding: 2px;
     border-radius: 3px;
-    justify-content: center;
-}
+    justify-content: center;}
 
 .floor-line.is-clickable {
-    cursor: pointer;
-}
+    cursor: pointer;}
 
 .floor-line.is-clickable:hover {
-    background: rgba(192, 57, 43, 0.12);
-}
+    background: rgba(192, 57, 43, 0.12);}
 
 .floor-slot {
     width: var(--slot-size);
@@ -714,8 +663,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-}
+    position: relative;}
 
 .floor-slot-penalty {
     position: absolute;
@@ -725,35 +673,28 @@ img {
     font-weight: 600;
 }
 
-/* ====================================================================
-   Tile graphics
-   ==================================================================== */
+/* Tile graphics */
 
 .tile {
     width: 100%;
     height: 100%;
     flex-shrink: 0;
-    display: block;
-}
+    display: block;}
 
 .tile-wrapper.is-clickable {
-    cursor: pointer;
-}
+    cursor: pointer;}
 
 .tile-wrapper.is-clickable:hover {
     transform: scale(1.08);
-    transition: transform 0.12s ease;
-}
+    transition: transform 0.12s ease;}
 
 .tile-wrapper.is-selected {
     transform: scale(1.15);
     filter: drop-shadow(0 0 5px var(--color-azul));
-    transition: transform 0.12s ease, filter 0.12s ease;
-}
+    transition: transform 0.12s ease, filter 0.12s ease;}
 
 .tile-wrapper.is-dimmed {
-    opacity: 0.35;
-}
+    opacity: 0.35;}
 
 /* Empty slots on pattern lines */
 .slot {
@@ -801,9 +742,7 @@ img {
     background-position: center;
 }
 
-/* ====================================================================
-   Bonus reference overlay (toggled on demand)
-   ==================================================================== */
+/* Bonus reference overlay (toggled on demand) */
 
 .bonus-card {
     background: var(--color-paper);
@@ -813,8 +752,7 @@ img {
     max-width: 600px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-}
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);}
 
 .bonus-card h2 {
     font-family: var(--font-display);
@@ -878,9 +816,7 @@ img {
     color: var(--color-ink-soft);
 }
 
-/* ====================================================================
-   Round summary & game over (overlay cards)
-   ==================================================================== */
+/* Round summary & game over (overlay cards) */
 
 .summary-card {
     background: var(--color-paper);
@@ -955,18 +891,25 @@ img {
     color: var(--color-azul);
 }
 
-/* ====================================================================
-   High contrast mode (colour-blindness accessibility)
+/* High contrast mode (colour-blindness accessibility)
    --------------------------------------------------------------------
    Activated by the Contrast button in the top bar. Adds a text label
    and a distinct border style to every tile so that colour is not the
    only distinguishing feature between tile types. Uses the data-label
    attribute set by main.js on each .tile-wrapper element, read back
-   via CSS attr(data-label) in the ::after pseudo-element.
+   via CSS data-label in the ::after pseudo-element.
+
    Labels: B=blue, Y=yellow, R=red, K=black, W=white (K is used for
-   black because B is already taken by blue — standard convention).
+   black because B is already taken by blue). Originally matched the
+   tiles to the official game, however this version has minecraft-theme
+   tiles instead. For simplicity, the same labelling has been used.
+
+   Feel free to swap these out for your own svg's. If you have a picture
+   in mind instead, there are image to svg converters online you can use.
+   I have used svg's because they can expand the image without losing
+   quality essentially.
    Border styles are chosen to be distinguishable even in greyscale.
-   ==================================================================== */
+*/
 
 .tile-wrapper {
     position: relative;

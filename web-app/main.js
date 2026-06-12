@@ -711,8 +711,7 @@ const make_floor_step = function (board_sel, floor_colours) {
  their before-state and after-state. Each step is a function with no
  arguments that performs one visual action.*/
 const build_player_steps = function (before, after, player_index) {
-    const board_sel = ".player-board[data-player-index=\"" + 
-        player_index + "\"]";
+    const board_sel = ".player-board[data-player-index=\"" + player_index + "\"]";
     const steps = [make_highlight_step(board_sel)];
 
     /* For each pattern line that was complete and is now empty, add a

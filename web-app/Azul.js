@@ -526,9 +526,7 @@ Azul.start_round = function (game) {
     });
 };
 
-// =====================================================================
 // Picking tiles (the heart of a turn)
-// =====================================================================
 
 /**
  * Performs the common end-of-turn bookkeeping after a pick: returns
@@ -692,10 +690,7 @@ Azul.pick_from_center = function (game, colour, pattern_line_index) {
     }));
 };
 
-// =====================================================================
 // Scoring
-// =====================================================================
-
 /**
  * Returns how many points placing a tile at (row, col) on a wall
  * would score. Counts the horizontally-connected and vertically-
@@ -933,10 +928,7 @@ Azul.end_round = function (game) {
     });
 };
 
-// =====================================================================
 // Winners
-// =====================================================================
-
 /**
  * Returns the indices of the winner(s) of a completed game. Highest
  * score wins; ties are broken by who has more completed horizontal
