@@ -5,9 +5,7 @@
 
 A web-app implementation of **Azul**, a tile-laying game designed by Michael Kiesling and published by Plan B Games in 2017.
 
-FOR WHOMEVER IS ASSESSING MY WORK: I would appreciate feedback on whatever areas you think could be improved. Please try and see if you can break the game at all, tell me what you think of the animations. Be nit-picky.
-In terms of the code, it needs to be understandable in how it has been written and structured to a non-coder, not necessarily commented like code typically is commented for coders. But at your discretion, any and all feedback would be welcome :D
-I am still in the process of commenting and making it clearer, but the game functionality should mostly be there. Let me know what you think of visuals, colours, placements of text etc. 
+N.B: Fix the diamond block design as it is hard to see with Deuteranopia.
 
 Thank you very much, I hope you enjoy my recreation of the game!
 

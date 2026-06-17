@@ -986,14 +986,12 @@ body.high-contrast .tile-wrapper[data-label="W"] .tile { outline: 3px solid #555
     50% { outline-color: var(--color-gold-soft); }
 }
 
-/* ====================================================================
-   Keyboard accessibility: visible focus rings
-   --------------------------------------------------------------------
-   Every interactive element gets a clear blue focus ring when reached
-   via keyboard navigation. :focus-visible (not :focus) means the rings
+/* Keyboard accessibility
+   
+   Every interactive element gets a clear blue ring when selected
+   via keyboard navigation. ":focus-visible" means the rings
    appear during Tab navigation but not on mouse clicks, so the UI
-   stays clean for mouse users.
-   ==================================================================== */
+   stays clean for mouse users. */
 
 .tile-wrapper.is-clickable:focus-visible {
     outline: 3px solid var(--color-azul);
@@ -1018,9 +1016,7 @@ button:focus-visible,
     outline-offset: 2px;
 }
 
-/* ====================================================================
-   Reduced motion preference
-   ==================================================================== */
+/* Reduced motion preference */
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
