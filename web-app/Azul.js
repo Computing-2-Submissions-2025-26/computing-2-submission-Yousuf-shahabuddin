@@ -678,9 +678,16 @@ Azul.pick_from_center = function (game, colour, pattern_line_index) {
         placement2.player,
         game.players
     );
-    const new_box = game.box.concat(
-        placement1.to_box
-    ).concat(placement2.to_box);
+    // The first-player token is not a real tile, so it must never enter
+    // the discard box (from there it could be shuffled into the bag and
+    // dealt into a factory). If a full floor line pushed it into the
+    // overflow, drop it here.
+    const overflow = placement1.to_box.concat(placement2.to_box).filter(
+        function (t) {
+            return t !== "first";
+        }
+    );
+    const new_box = game.box.concat(overflow);
 
     return after_pick(R.mergeRight(game, {
         "center": remaining,

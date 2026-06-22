@@ -12,9 +12,7 @@
 
 <main id="app">
 
-    <!-- ================================================================
-         SETUP SCREEN: player count, names, and full rules
-         ================================================================ -->
+    <!-- SETUP SCREEN: player count, names, and full rules -->
     <section id="setup-screen" class="screen overlay" aria-labelledby="setup-heading">
         <div class="setup-card">
             <h1 class="setup-title">AZUL</h1>
@@ -47,91 +45,9 @@
                 <button type="submit" class="primary-button">Start game</button>
             </form>
 
-            <details class="rules-panel">
-                <summary>How to play</summary>
-
-                <h3>The goal</h3>
-                <p>
-                    Score the most points by decorating the wall of your
-                    player board with coloured tiles. The game ends after
-                    any round in which a player has completed a full
-                    horizontal row of five tiles on their wall.
-                </p>
-
-                <h3>Each round (Factory Offer)</h3>
-                <ol>
-                    <li>
-                        On your turn, pick <strong>all tiles of one
-                        colour</strong> from one factory display
-                        <strong>or</strong> from the centre of the table.
-                    </li>
-                    <li>
-                        If you picked from a factory, the leftover tiles
-                        in that factory slide into the centre.
-                    </li>
-                    <li>
-                        The first player to pick from the centre each
-                        round also takes the <strong>1</strong>
-                        first-player token. The token goes on their floor
-                        line (costing a point) and decides who starts
-                        next round.
-                    </li>
-                    <li>
-                        Place all the tiles you picked onto
-                        <strong>one</strong> of your five pattern lines.
-                        Line 1 holds 1 tile; line 5 holds 5.
-                    </li>
-                    <li>
-                        Tiles in a pattern line must all be the same
-                        colour, and the colour cannot already be in the
-                        corresponding row of your wall.
-                    </li>
-                    <li>
-                        Any tiles you can't place (or pick to discard)
-                        fall on your floor line.
-                    </li>
-                </ol>
-
-                <h3>End of round (Wall-tiling)</h3>
-                <p>
-                    Each <strong>complete</strong> pattern line moves
-                    one tile onto the matching colour space in its wall
-                    row. You score immediately:
-                </p>
-                <ul>
-                    <li>If the new tile has no neighbours, score 1.</li>
-                    <li>
-                        Otherwise count every tile connected to it
-                        horizontally and vertically (including the new
-                        tile itself). Add both runs to your score.
-                    </li>
-                </ul>
-                <p>
-                    Then subtract floor-line penalties (-1, -1, -2, -2,
-                    -2, -3, -3 for the seven floor positions). Your
-                    score cannot drop below zero.
-                </p>
-
-                <h3>End of game (Bonus)</h3>
-                <ul>
-                    <li>+2 per complete <strong>horizontal row</strong></li>
-                    <li>+7 per complete <strong>vertical column</strong></li>
-                    <li>+10 per <strong>colour</strong> with all 5 placed</li>
-                </ul>
-                <p>
-                    Highest score wins. Ties broken by more completed
-                    rows.
-                </p>
-                
-                <h3>Controls</h3>
-                <p>
-                    Typically played with a mouse. If playing with a keyboard only,
-                     use Tab and shift + Tab to navigate between interactive elements and Enter 
-                     or Space to activate them. The game is fully playable with 
-                     keyboard alone, and all actions have accessible labels and 
-                     instructions.
-                </p>
-            </details>
+            <button id="setup-rules-button" class="text-button" type="button">
+                How to play
+            </button>
         </div>
     </section>
 
@@ -157,6 +73,9 @@
                     <img id="box-icon" src="./assets/box.svg" alt="" class="supply-mini-icon">
                     <span id="box-count">0</span>
                 </span>
+                <button id="rules-button" class="text-button" type="button" title="How to play">
+                    Rules
+                </button>
                 <button id="contrast-button" class="text-button" type="button" title="Toggle high contrast mode for colour-blindness">
                     Contrast
                 </button>
@@ -181,6 +100,99 @@
         <!-- Bottom: all player boards in a row, vertically centered -->
         <div class="boards-row-wrapper">
             <div class="boards-row" id="boards-row"></div>
+        </div>
+    </section>
+
+    <!-- RULES OVERLAY (shared by the setup screen and the in-game Rules
+         button, so the rules text lives in exactly one place) -->
+    <section id="rules-overlay" class="overlay hidden" aria-labelledby="rules-heading">
+        <div class="rules-card">
+            <h2 id="rules-heading">How to play</h2>
+
+            <h3>The goal</h3>
+            <p>
+                Score the most points by decorating the wall of your
+                player board with coloured tiles. The game ends after
+                any round in which a player has completed a full
+                horizontal row of five tiles on their wall.
+            </p>
+
+            <h3>Each round (Factory Offer)</h3>
+            <ol>
+                <li>
+                    On your turn, pick <strong>all tiles of one
+                    colour</strong> from one factory display
+                    <strong>or</strong> from the centre of the table.
+                </li>
+                <li>
+                    If you picked from a factory, the leftover tiles
+                    in that factory slide into the centre.
+                </li>
+                <li>
+                    The first player to pick from the centre each
+                    round also takes the <strong>1</strong>
+                    first-player token. The token goes on their floor
+                    line (costing a point) and decides who starts
+                    next round.
+                </li>
+                <li>
+                    Place all the tiles you picked onto
+                    <strong>one</strong> of your five pattern lines.
+                    Line 1 holds 1 tile; line 5 holds 5.
+                </li>
+                <li>
+                    Tiles in a pattern line must all be the same
+                    colour, and the colour cannot already be in the
+                    corresponding row of your wall.
+                </li>
+                <li>
+                    Any tiles you can't place (or pick to discard)
+                    fall on your floor line.
+                </li>
+            </ol>
+
+            <h3>End of round (Wall-tiling)</h3>
+            <p>
+                Each <strong>complete</strong> pattern line moves
+                one tile onto the matching colour space in its wall
+                row. You score immediately:
+            </p>
+            <ul>
+                <li>If the new tile has no neighbours, score 1.</li>
+                <li>
+                    Otherwise count every tile connected to it
+                    horizontally and vertically (including the new
+                    tile itself). Add both runs to your score.
+                </li>
+            </ul>
+            <p>
+                Then subtract floor-line penalties (-1, -1, -2, -2,
+                -2, -3, -3 for the seven floor positions). Your
+                score cannot drop below zero.
+            </p>
+
+            <h3>End of game (Bonus)</h3>
+            <ul>
+                <li>+2 per complete <strong>horizontal row</strong></li>
+                <li>+7 per complete <strong>vertical column</strong></li>
+                <li>+10 per <strong>colour</strong> with all 5 placed</li>
+            </ul>
+            <p>
+                Highest score wins. Ties broken by more completed rows.
+            </p>
+
+            <h3>Controls</h3>
+            <p>
+                Typically played with a mouse. If playing with a keyboard
+                only, use Tab and Shift+Tab to navigate between interactive
+                elements and Enter or Space to activate them. The game is
+                fully playable with keyboard alone, and all actions have
+                accessible labels and instructions.
+            </p>
+
+            <button id="rules-close-button" class="primary-button" type="button">
+                Got it
+            </button>
         </div>
     </section>
 

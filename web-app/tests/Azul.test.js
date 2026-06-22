@@ -141,6 +141,61 @@ describe("Starting a game", function () {
 });
 
 
+// Dealing the next round - who starts and what gets refilled.
+
+
+describe("Dealing the next round", function () {
+    const round_over_game = function (overrides) {
+        return make_game(Object.assign({
+            "phase": Azul.PHASE.ROUND_OVER,
+            "factories": [[], [], [], [], []],
+            "center": [],
+            "bag": Array(100).fill("blue"),
+            "first_token_in_center": false
+        }, overrides));
+    };
+
+    it("refills every factory with four tiles", function () {
+        const after = Azul.start_round(round_over_game({}));
+        after.factories.forEach(function (f) {
+            assert.equal(f.length, 4);
+        });
+    });
+    it("increments the round number", function () {
+        const after = Azul.start_round(round_over_game({"round": 3}));
+        assert.equal(after.round, 4);
+    });
+    it("returns the first-player token to the centre", function () {
+        const after = Azul.start_round(round_over_game({}));
+        assert.equal(after.first_token_in_center, true);
+    });
+    it("the holder of the first-player token starts the new round",
+        function () {
+            const after = Azul.start_round(round_over_game({
+                "active_player": 0,
+                "players": [
+                    make_player({"name": "A", "has_first_token": false}),
+                    make_player({"name": "B", "has_first_token": true})
+                ]
+            }));
+            assert.equal(after.active_player, 1);
+        });
+    it("clears the first-player token flag from the holder", function () {
+        const after = Azul.start_round(round_over_game({
+            "players": [
+                make_player({"name": "A", "has_first_token": false}),
+                make_player({"name": "B", "has_first_token": true})
+            ]
+        }));
+        assert.equal(after.players[1].has_first_token, false);
+    });
+    it("returns to the FACTORY_OFFER phase", function () {
+        const after = Azul.start_round(round_over_game({}));
+        assert.equal(after.phase, Azul.PHASE.FACTORY_OFFER);
+    });
+});
+
+
 // Placement legality - when can you place tiles and where?
 
 
@@ -324,6 +379,31 @@ describe("Picking from the centre", function () {
             undefined
         );
     });
+    it("never sends the first-player token to the box on a full floor",
+        function () {
+            // The active player's floor line is already full, so the
+            // first-player token has nowhere to sit. It must be dropped,
+            // not pushed into the box (from where it could be shuffled
+            // back into the bag and dealt as if it were a real tile).
+            const full_floor = [
+                "red", "red", "red", "red", "red", "red", "red"
+            ];
+            const game = make_game({
+                "factories": [[], [], [], [], []],
+                "center": ["blue"],
+                "first_token_in_center": true,
+                "box": [],
+                "players": [
+                    make_player({"name": "A", "floor_line": full_floor}),
+                    make_player({"name": "B"})
+                ]
+            });
+            const after = Azul.pick_from_center(game, "blue", 5);
+            assert.ok(!after.box.includes("first"));
+            // The player is still recorded as holding the token, so they
+            // start the next round even though it did not fit on the floor.
+            assert.equal(after.players[0].has_first_token, true);
+        });
 });
 
 
@@ -476,7 +556,6 @@ describe("Bonus scoring", function () {
             [undefined, undefined, undefined, undefined, undefined],
             [undefined, undefined, undefined, undefined, undefined]
         ];
-        Azul.COLOURS.forEach(function () {});
         // Blue is at column 0 in row 0, column 1 in row 1 and so on
         Azul.WALL_PATTERN.forEach(function (row, r) {
             const col = row.indexOf("blue");
@@ -633,6 +712,66 @@ describe("End of game", function () {
                 ]
             });
             assert.deepEqual(Azul.winners(game), [1]);
+        });
+    it("breaks a score tie in favour of more completed rows",
+        function () {
+            const full_row = ["blue", "yellow", "red", "black", "white"];
+            const empty_row = [
+                undefined, undefined, undefined, undefined, undefined
+            ];
+            // A and B tie on score, but A has two completed rows to B's one.
+            const game = make_game({
+                "phase": Azul.PHASE.GAME_OVER,
+                "players": [
+                    make_player({
+                        "name": "A",
+                        "score": 40,
+                        "wall": [
+                            full_row, full_row,
+                            empty_row, empty_row, empty_row
+                        ]
+                    }),
+                    make_player({
+                        "name": "B",
+                        "score": 40,
+                        "wall": [
+                            full_row, empty_row,
+                            empty_row, empty_row, empty_row
+                        ]
+                    })
+                ]
+            });
+            assert.deepEqual(Azul.winners(game), [0]);
+        });
+    it("shares victory when score and completed rows are both tied",
+        function () {
+            const full_row = ["blue", "yellow", "red", "black", "white"];
+            const empty_row = [
+                undefined, undefined, undefined, undefined, undefined
+            ];
+            // Both players tie on score AND on completed-row count.
+            const game = make_game({
+                "phase": Azul.PHASE.GAME_OVER,
+                "players": [
+                    make_player({
+                        "name": "A",
+                        "score": 40,
+                        "wall": [
+                            full_row, empty_row,
+                            empty_row, empty_row, empty_row
+                        ]
+                    }),
+                    make_player({
+                        "name": "B",
+                        "score": 40,
+                        "wall": [
+                            full_row, empty_row,
+                            empty_row, empty_row, empty_row
+                        ]
+                    })
+                ]
+            });
+            assert.deepEqual(Azul.winners(game), [0, 1]);
         });
 });
 

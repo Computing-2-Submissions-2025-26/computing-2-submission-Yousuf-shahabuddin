@@ -86,6 +86,7 @@ app.score_snapshot = [];
 
 const all_screens = ["#setup-screen", "#game-screen"];
 const all_overlays = [
+    "#rules-overlay",
     "#bonus-overlay",
     "#round-summary-screen",
     "#game-over-screen"
@@ -918,6 +919,16 @@ const handle_close_bonus = function () {
     hide_all_overlays();
 };
 
+// Rules overlay (available from the setup screen and during the game)
+
+const handle_show_rules = function () {
+    show_overlay("#rules-overlay");
+};
+
+const handle_close_rules = function () {
+    hide_all_overlays();
+};
+
 // High-contrast mode (colour-blindness accessibility)
 
 /* Toggled by the Contrast button in the top bar. Adds a class
@@ -1081,6 +1092,9 @@ const init = function () {
     $("#quit-button").addEventListener("click", handle_quit);
     $("#bonus-button").addEventListener("click", handle_show_bonus);
     $("#bonus-close-button").addEventListener("click", handle_close_bonus);
+    $("#rules-button").addEventListener("click", handle_show_rules);
+    $("#setup-rules-button").addEventListener("click", handle_show_rules);
+    $("#rules-close-button").addEventListener("click", handle_close_rules);
     $("#contrast-button").addEventListener("click", handle_contrast_toggle);
     document.addEventListener("keydown", handle_global_keydown);
     document.addEventListener("mousemove", handle_mouse_move);

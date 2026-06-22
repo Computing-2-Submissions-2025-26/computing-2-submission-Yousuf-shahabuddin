@@ -250,26 +250,28 @@ img {
     background: white;}
 
 /* Rules panel inside setup card */
-.rules-panel {
-    margin-top: 1.5rem;
-    border-top: 1px solid var(--color-rule);
-    padding-top: 1rem;
+.rules-card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-gold-soft);
+    border-radius: 8px;
+    padding: 1.75rem 2rem;
+    max-width: 600px;
+    width: 100%;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-.rules-panel summary {
-    cursor: pointer;
+.rules-card h2 {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     color: var(--color-azul);
-    padding: 0.25rem 0;
+    margin-bottom: 0.5rem;
+    text-align: center;
 }
 
-.rules-panel summary:hover {
-    color: var(--color-azul-dark);
-}
-
-.rules-panel h3 {
+.rules-card h3 {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1rem;
@@ -278,17 +280,22 @@ img {
     margin-bottom: 0.4rem;
 }
 
-.rules-panel p, .rules-panel ol, .rules-panel ul {
+.rules-card p, .rules-card ol, .rules-card ul {
     margin-bottom: 0.5rem;
     font-size: 0.875rem;
 }
 
-.rules-panel ol, .rules-panel ul {
+.rules-card ol, .rules-card ul {
     padding-left: 1.25rem;
 }
 
-.rules-panel li {
+.rules-card li {
     margin-bottom: 0.25rem;
+}
+
+.rules-card .primary-button {
+    display: block;
+    margin: 1.25rem auto 0 auto;
 }
 
 
@@ -986,12 +993,14 @@ body.high-contrast .tile-wrapper[data-label="W"] .tile { outline: 3px solid #555
     50% { outline-color: var(--color-gold-soft); }
 }
 
-/* Keyboard accessibility
-   
-   Every interactive element gets a clear blue ring when selected
-   via keyboard navigation. ":focus-visible" means the rings
+/* ====================================================================
+   Keyboard accessibility: visible focus rings
+   --------------------------------------------------------------------
+   Every interactive element gets a clear blue focus ring when reached
+   via keyboard navigation. :focus-visible (not :focus) means the rings
    appear during Tab navigation but not on mouse clicks, so the UI
-   stays clean for mouse users. */
+   stays clean for mouse users.
+   ==================================================================== */
 
 .tile-wrapper.is-clickable:focus-visible {
     outline: 3px solid var(--color-azul);
@@ -1016,7 +1025,9 @@ button:focus-visible,
     outline-offset: 2px;
 }
 
-/* Reduced motion preference */
+/* ====================================================================
+   Reduced motion preference
+   ==================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
