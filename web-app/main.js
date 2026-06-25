@@ -652,8 +652,10 @@ const fly_tile = function (colour, from, to) {
 const apply_fly_target = function (el, to) {
     const reflow = el.offsetWidth;
     el.dataset.reflow = String(reflow);
-    el.style.transition = "left " + SCORE_FLY_TIME + "ms ease-in-out, " +
-        " top " + SCORE_FLY_TIME + "ms ease-in-out";
+    el.style.transition = (
+        "left " + SCORE_FLY_TIME + "ms ease-in-out, " +
+        "top " + SCORE_FLY_TIME + "ms ease-in-out"
+    );
     el.style.left = to.x + "px";
     el.style.top = to.y + "px";
     window.setTimeout(function () {
@@ -712,7 +714,9 @@ const make_floor_step = function (board_sel, floor_colours) {
  their before-state and after-state. Each step is a function with no
  arguments that performs one visual action.*/
 const build_player_steps = function (before, after, player_index) {
-    const board_sel = ".player-board[data-player-index=\"" + player_index + "\"]";
+    const board_sel = (
+        ".player-board[data-player-index=\"" + player_index + "\"]"
+    );
     const steps = [make_highlight_step(board_sel)];
 
     /* For each pattern line that was complete and is now empty, add a
@@ -743,7 +747,6 @@ const build_player_steps = function (before, after, player_index) {
 
     return steps;
 };
-
 /* Runs an array of step functions in sequence, pausing SCORE_STEP_DELAY
  between each. Calls on_complete after the last step.*/
 const run_steps = function (steps, index, on_complete) {
@@ -957,6 +960,9 @@ const handle_contrast_toggle = function () {
  cluster eases at a slightly different rate so they fan out a little.
  */
 
+
+
+
 const DRAG_EASE = 0.18;          // fraction of the gap closed per frame
 const DRAG_TILE_SPREAD = 6;      // px offset between stacked tiles
 
@@ -968,8 +974,8 @@ drag.active = false;
 // drag.frame holds the requestAnimationFrame id while animating; it is
 // left unset (undefined) when no animation is running.
 
-// Counts how many tiles of the selected colour are in the selection's
-// source, so we know how many floating copies to create.
+/* Counts how many tiles of the selected colour are in the selection's
+  source, so we know how many floating copies to create.*/
 const count_selected_tiles = function () {
     if (app.selection === undefined) {
         return 0;
@@ -1045,6 +1051,8 @@ const start_drag = function () {
     drag.frame = window.requestAnimationFrame(animate_drag);
 };
 
+
+
 /* Single entry point: called after any change to app.selection. Starts
 the trail if a selection exists and the cursor has been seen (mouse
 user), otherwise stops it.*/
@@ -1062,9 +1070,9 @@ const handle_mouse_move = function (event) {
 };
 
 
+
+
 // Global keyboard shortcuts
-
-
 /* Escape key deselects any currently-picked tile. This matches the
 behaviour of clicking the already-selected tile to deselect it, and
 is a common accessibility pattern for cancelling a selection, so it
@@ -1077,6 +1085,8 @@ const handle_global_keydown = function (event) {
         render_game_screen();
     }
 };
+
+
 
 
 const init = function () {
